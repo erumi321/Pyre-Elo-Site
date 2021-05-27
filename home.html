@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="home.css">
+    <script src="home.js"></script>
+    <title>Page Title</title>
+</head>
+<body>
+    <div class="former--container">
+        <p class="label">
+            Former Score
+        </p>
+        <input type="text" class="ratingfield--former">
+        </input>
+    </div>
+    <div class="update--container">
+        <p class="label">
+            Enter your opponets Scribe Rating
+        </p>
+        <div class="row">
+            <input type="text" class="ratingfield--update">
+            <div class="int--col">
+                <input type="checkbox" id="isWinCheck" value="Heyyy" onClick="setWin()" checked>
+                <p class="int--label">
+                    Victory?
+                </p>
+            </div>
+        </div>
+        <button class="confirmBtn" onClick="submitNewValues()">
+            <p>Confirm</p>
+        </button>
+    </div>
+    <p class="new--rating">
+        Your rating is: 
+    </p>
+
+<!--Firebase Integration-->
+<!-- The core Firebase JS SDK is always required and must be listed first -->
+<script src="https://www.gstatic.com/firebasejs/8.6.2/firebase-app.js"></script>
+
+<!-- TODO: Add SDKs for Firebase products that you want to use
+     https://firebase.google.com/docs/web/setup#available-libraries -->
+<script src="https://www.gstatic.com/firebasejs/8.6.2/firebase-analytics.js"></script>
+
+<script>
+  // Your web app's Firebase configuration
+  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+  var firebaseConfig = {
+    apiKey: "AIzaSyCsSCQK9Ap9xo8cCRpEI3nNeS65b5JIHoU",
+    authDomain: "pyre-elo-calc.firebaseapp.com",
+    projectId: "pyre-elo-calc",
+    storageBucket: "pyre-elo-calc.appspot.com",
+    messagingSenderId: "1056798113239",
+    appId: "1:1056798113239:web:4ba364ced92286bc0cdf92",
+    measurementId: "G-YHTLKM2RS5"
+  };
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+  firebase.analytics();
+</script>
+</body>
+</html>

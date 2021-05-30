@@ -148,6 +148,8 @@ function submitNewValues(){
                     }
                     console.log(Math.round(changeA));
                     console.log(Math.round(changeB));
+                    changeA = Math.round(changeA);
+                    changeB = Math.round(changeB);
                     db.collection("users").doc(player.id).set({
                         password: player.data().password,
                         username: player.data().username,
@@ -156,6 +158,14 @@ function submitNewValues(){
                     .then(() => {
                         console.log("User rating updated succesfully");
                         document.getElementById("new--rating").innerHTML = "Your rating is: " + Math.round(player.data().rating + changeA)
+                        db.collection("users").doc(player.id).collection("matchHistory").add({
+                            opponent: opp.data().username,
+                            oppRating: opp.data().rating, //Rating at the time of match before score applied
+                            win: isWin,
+                            ratingChange: changeA
+                        }).catch((error) => {
+                            console.error("Error adding new item to user history: ", error);
+                        });
                     })
                     .catch((error) => {
                         console.error("Error writing document: ", error);
@@ -166,7 +176,14 @@ function submitNewValues(){
                         rating: Math.round(opp.data().rating + changeB)
                     })
                     .then(() => {
-                        console.log("Opponent rating updated succesfully");
+                        db.collection("users").doc(opp.id).collection("matchHistory").add({
+                            opponent: player.data().username,
+                            oppRating: player.data().rating, //Rating at the time of match before score applied
+                            win: !isWin,
+                            ratingChange: changeB
+                        }).catch((error) => {
+                            console.error("Error adding new item to opponent history: ", error);
+                        });
                     })
                     .catch((error) => {
                         console.error("Error writing document: ", error);

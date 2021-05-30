@@ -1,16 +1,4 @@
 
-var firebaseConfig = {
-    apiKey: "AIzaSyCsSCQK9Ap9xo8cCRpEI3nNeS65b5JIHoU",
-    authDomain: "pyre-elo-calc.firebaseapp.com",
-    projectId: "pyre-elo-calc",
-    storageBucket: "pyre-elo-calc.appspot.com",
-    messagingSenderId: "1056798113239",
-    appId: "1:1056798113239:web:4ba364ced92286bc0cdf92",
-    measurementId: "G-YHTLKM2RS5"
-  };
-  // Initialize Firebase
-  firebase.initializeApp(firebaseConfig);
-  var db = firebase.firestore();
 //LS = (1/2)(OW) + (1/2)(RW) = (1/2)(OW + RW)
 /* Liberation Score (suggested by C0ranium)
 Name   |Overall Record  |Recent Record  |Overall Win%(OW)|Recent Win%(RW)   |Liberation Score(LS)
@@ -107,13 +95,17 @@ Divisor is 100
 A wins (1000/100) *1 = 10
 B wins (1000/100) * 1 = 10
 */
-var username = ""
+
+var username = "";
 var oppName = ""
 var isWin = true
 
-function updateName() {
-    username = document.getElementById("namefield").value;
+function setup() {
+    username = localStorage.getItem("username");
+    console.log(username);
+    document.getElementById("name--label").innerHTML = (username != null) ? "Logged in as: " + username : "Not signed in"; 
 }
+
 function updateOppName() {
     oppName = document.getElementById("oppnamefield").value;
 }

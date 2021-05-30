@@ -12,15 +12,17 @@
 <script src="https://www.gstatic.com/firebasejs/8.6.2/firebase-messaging.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.6.2/firebase-functions.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.6.2/firebase-storage.js"></script>
+<script src="../universal.js"></script>
 <script src="home.js"></script>
 </head>
-<body>
+<body onload="setup()">
+    <form action="../log-in/log-in.html">
+        <input type="submit" value="Go to Log-In" />
+    </form>
     <div class="name--container">
-        <p class="label">
-            Name
+        <p class="label" id="name--label">
+            Logged in as: 
         </p>
-        <input type="text" class="namefield" id="namefield" onchange="updateName()">
-        </input>
     </div>
     <div class="oppname--container">
         <p class="label">

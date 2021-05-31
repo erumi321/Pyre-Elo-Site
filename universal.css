@@ -10,8 +10,11 @@ html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockq
 
 /* Add a black background color to the top navigation */
 .topnav {
-    background-color: #333;
+    background-color: #0b0a26;
     overflow: hidden;
+    position: fixed; /* Set the navbar to fixed position */
+    top: 0; /* Position the navbar at the top of the page */
+    width: 100%; /* Full width */
 }
 
 .topnav .left {
@@ -40,6 +43,14 @@ html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockq
 
 /* Add a color to the active/current link */
 .topnav a.active {
-    background-color: #04AA6D;
+    background-color: #6f6cde;
     color: white;
+}
+
+.int--col {
+    display: block;
+}
+
+.int--label {
+    display: inline-block;
 }

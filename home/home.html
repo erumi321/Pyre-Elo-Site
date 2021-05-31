@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
     <link rel="stylesheet" href="../universal.css">
     <link rel="stylesheet" href="home.css">
     <title>Page Title</title>
@@ -41,46 +42,66 @@
             </div>
             <div class="hero--buttonrow">
                 <a href="#main">
-                    <div class="hero--button"><span>Main</span></div>
+                    <button class="confirmbutton hero--button" onclick="submitNewValues()">
+                        <span>Main</span>
+                    </button>
                 </a>
                 <a href="../profile/profile.html">
-                    <div class="hero--button"><span>Profile</span></div>
+                    <button class="confirmbutton hero--button" onclick="submitNewValues()">
+                        <span>Profile</span>
+                    </button>
                 </a>
             </div>
         </div>  
     </div>
     <div id="main">
-        <div class="name--container">
-            <p class="label" id="name--label">
-                Logged in as: 
-            </p>
-        </div>
-        <div class="oppname--container">
-            <p class="label">
-                Opponents Name
-            </p>
-            <input type="text" class="namefield" id="oppnamefield" onchange="updateOppName()">
-            </input>
-        </div>
-        <p></p>
-        <div class="update--container">
-            <div class="int--col">
-                <button class="confirmBtn" onClick="submitNewValues()">
-                    <p>Confirm</p>
-                </button>
-                <input type="checkbox" id="isWinCheck" onClick="setWin()" checked>
-                <p class="int--label">
-                    Victory?
-                </p>
-                <input type="checkbox" id="isWinCheck" onClick="setModded()">
-                <p class="int--label">
-                    Modded?
-                </p>
+        <div class="updatefield--container">
+            <div class="int--col center">
+                <div class="main--container int--label">
+                    <div class="name--container">
+                        <p class="name--label" id="name--label">
+                            Logged in as: 
+                        </p>
+                    </div>
+                    <div class="form--group">
+                        <input type="text" class="form--input" id="oppnamefield" placeholder="Opponent's Username" required="" onchange="updateOppName()"/>
+                        <label for="name" class="form--label">Opponent's Username</label>
+                    </div>
+                    <div class="mainupdate">
+                        <button class="confirmbutton int--label" onclick="submitNewValues()">
+                            <span>Confirm</span>
+                        </button>
+                        <div class="confirm--area int--label">
+                            <div class="label--area int--label">
+                                <div class="int--col">
+                                    <p class="int--label">
+                                        Victory?
+                                    </p>
+                                    <div class="toggle-btn int--label" id="_2nd-toggle-btn">
+                                        <input type="checkbox" id="isWinCheck" onclick="setWin()" checked>
+                                        <span></span>
+                                    </div>
+
+                                    <div class="modded--area">
+                                        <p class="int--label">
+                                            Modded?
+                                        </p>
+                                        <div class="toggle-btn int--label" id="_2nd-toggle-btn">
+                                            <input type="checkbox" id="isModdedCheck" onclick="setModded()">
+                                            <span></span>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <p class="name--label" id="new--rating" style="transform: scale(0.66); margin-bottom: 50px;">
+                            Your new rating is: 
+                        </p>
+                    </div>
+                </div>
             </div>
         </div>
-        <p class="new--rating" id="new--rating">
-            Your rating is: 
-        </p>
     </div>
 </body>
 </html>

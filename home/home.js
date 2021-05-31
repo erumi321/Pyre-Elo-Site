@@ -113,12 +113,15 @@ function updateOppName() {
 
 function setModded() {
     modded = !modded
+    console.log(modded);
 }
 
 function setWin(){
     isWin = !isWin;
+    console.log(isWin);
 }
 function submitNewValues(){
+    console.log("submitting");
     if (oppName == "") {
         return;
     }

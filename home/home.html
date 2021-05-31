@@ -26,36 +26,61 @@
             <a href="../profile/profile.html" id="topnav--loginbtn">Profile</a>
         </div>
     </div>
-    <div class="name--container">
-        <p class="label" id="name--label">
-            Logged in as: 
-        </p>
-    </div>
-    <div class="oppname--container">
-        <p class="label">
-            Opponents Name
-        </p>
-        <input type="text" class="namefield" id="oppnamefield" onchange="updateOppName()">
-        </input>
-    </div>
-    <p></p>
-    <div class="update--container">
+    <div class="hero">
         <div class="int--col">
-            <button class="confirmBtn" onClick="submitNewValues()">
-                <p>Confirm</p>
-            </button>
-            <input type="checkbox" id="isWinCheck" onClick="setWin()" checked>
-            <p class="int--label">
-                Victory?
-            </p>
-            <input type="checkbox" id="isWinCheck" onClick="setModded()">
-            <p class="int--label">
-                Modded?
+            <div class="hero--title">
+                <div class="int--col center">
+                    <h1 class="title--header">
+                        erumi321's Pyre Elo Tracker
+                    </h1>
+                    <h3 class="title--descriptor">
+                        A website for tracking Scribe scores between players allowing for more competition if desired
+                    </h3>
+                </div>
+
+            </div>
+            <div class="hero--buttonrow">
+                <a href="#main">
+                    <div class="hero--button"><span>Main</span></div>
+                </a>
+                <a href="../profile/profile.html">
+                    <div class="hero--button"><span>Profile</span></div>
+                </a>
+            </div>
+        </div>  
+    </div>
+    <div id="main">
+        <div class="name--container">
+            <p class="label" id="name--label">
+                Logged in as: 
             </p>
         </div>
+        <div class="oppname--container">
+            <p class="label">
+                Opponents Name
+            </p>
+            <input type="text" class="namefield" id="oppnamefield" onchange="updateOppName()">
+            </input>
+        </div>
+        <p></p>
+        <div class="update--container">
+            <div class="int--col">
+                <button class="confirmBtn" onClick="submitNewValues()">
+                    <p>Confirm</p>
+                </button>
+                <input type="checkbox" id="isWinCheck" onClick="setWin()" checked>
+                <p class="int--label">
+                    Victory?
+                </p>
+                <input type="checkbox" id="isWinCheck" onClick="setModded()">
+                <p class="int--label">
+                    Modded?
+                </p>
+            </div>
+        </div>
+        <p class="new--rating" id="new--rating">
+            Your rating is: 
+        </p>
     </div>
-    <p class="new--rating" id="new--rating">
-        Your rating is: 
-    </p>
 </body>
 </html>

@@ -99,8 +99,9 @@ B wins (1000/100) * 1 = 10
 var username = "";
 var oppName = ""
 var isWin = true
+var modded = false;
 
-function setup() {
+function homeSetup() {
     username = localStorage.getItem("username");
     console.log(username);
     document.getElementById("name--label").innerHTML = (username != null) ? "Logged in as: " + username : "Not signed in"; 
@@ -108,6 +109,10 @@ function setup() {
 
 function updateOppName() {
     oppName = document.getElementById("oppnamefield").value;
+}
+
+function setModded() {
+    modded = !modded
 }
 
 function setWin(){
@@ -153,16 +158,21 @@ function submitNewValues(){
                     db.collection("users").doc(player.id).set({
                         password: player.data().password,
                         username: player.data().username,
-                        rating: Math.round(player.data().rating + changeA)
+                        rating: Math.max(Math.round(player.data().rating + changeA), 1)
                     })
                     .then(() => {
+                        var d = new Date();
                         console.log("User rating updated succesfully");
                         document.getElementById("new--rating").innerHTML = "Your rating is: " + Math.round(player.data().rating + changeA)
+                        
                         db.collection("users").doc(player.id).collection("matchHistory").add({
                             opponent: opp.data().username,
                             oppRating: opp.data().rating, //Rating at the time of match before score applied
                             win: isWin,
-                            ratingChange: changeA
+                            ratingChange: changeA,
+                            modded: modded,
+                            date: eval(d.getMonth() + 1) + "/" + d.getDate() + "/" + d.getFullYear(),
+                            timefrom: d.getTime()
                         }).catch((error) => {
                             console.error("Error adding new item to user history: ", error);
                         });
@@ -173,14 +183,18 @@ function submitNewValues(){
                     db.collection("users").doc(opp.id).set({
                         password: opp.data().password,
                         username: opp.data().username,
-                        rating: Math.round(opp.data().rating + changeB)
+                        rating: Math.max(Math.round(opp.data().rating + changeB), 1)
                     })
                     .then(() => {
+                        var d = new Date();
                         db.collection("users").doc(opp.id).collection("matchHistory").add({
                             opponent: player.data().username,
                             oppRating: player.data().rating, //Rating at the time of match before score applied
                             win: !isWin,
-                            ratingChange: changeB
+                            ratingChange: changeB,
+                            modded: modded,
+                            date: eval(d.getMonth() + 1) + "/" + d.getDate() + "/" + d.getFullYear(),
+                            timefrom: d.getTime()
                         }).catch((error) => {
                             console.error("Error adding new item to opponent history: ", error);
                         });

@@ -19,12 +19,13 @@ function logIn(){
         querySnapshot.forEach((player) => {
             didPlayerPass = true;
             if (password == player.data().password) {
-                localStorage.setItem('username', player.data().username); 
+                localStorage.setItem('username', player.data().username);
+                alert("Successfully Signed In");
+                document.location.href = "../home/home.html";
             }else{
                 alert("Wrong Password");
             }
         });
-        alert((didPlayerPass) ? "Success" : "Wrong Username")
     })
     .catch((error) => {
         console.log("Error getting documents: ", error);
@@ -61,6 +62,7 @@ function signUp(){
             console.log("Document written with ID: ", docRef.id);
             localStorage.setItem('username', username)
             alert("Success " + username + ", you have been signed in");
+            document.location.href = "../home/home.html";
         })
         .catch((error) => {
             console.error("Error adding document: ", error);

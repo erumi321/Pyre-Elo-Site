@@ -1,0 +1,50 @@
+.body {
+    font-family: "Fira Sans", sans-serif;
+    line-height: 1.6;
+    min-height: 100vh;
+    place-items: center;
+}
+
+.historycard--holder {
+    place-items: center;
+    display:flex;
+}
+
+.historycard {
+    margin: 1px 10px 0px 10px;
+        width: 330px;
+    display: flex;
+    flex-direction: row;
+    background-color: #ddd;
+    text-align: center;
+    box-sizing: border-box;
+    padding: 0px 10px 0px 0px;
+}
+
+.historycard--sidebar {
+    margin: auto 0;
+    padding: 0 20px;
+}
+
+.historycard--image {
+    width: 32px;
+    height: 32px;
+    max-width: 32px;
+    max-height: 32px;
+}
+
+.main--playercol {
+    padding: 0 20px;
+}
+
+.main--result {
+    padding: 0 20px 0 0;
+}
+
+.main--date {
+    margin: auto 0;
+}
+
+.hidden {
+    display: none;
+}

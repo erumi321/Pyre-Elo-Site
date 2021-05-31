@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <link rel="stylesheet" href="../universal.css">
     <link rel="stylesheet" href="log-in.css">
     <title>Page Title</title>
 
@@ -15,10 +16,16 @@
 <script src="../universal.js"></script>
 <script src="log-in.js"></script>
 </head>
-<body>
-    <form action="../home/home.html">
-        <input type="submit" value="Go to Home" />
-    </form>
+<body onload="universalSetup()">
+    <div class="topnav">
+        <div class="left">
+            <a href="../home/home.html">Home</a>
+        </div>
+        <div class="right">
+            <a href="#contact">Contact</a>
+            <a class = "active" href="../profile/profile.html" id="topnav--loginbtn">Profile</a>
+        </div>
+    </div>
     <div class="name--container">
         <p class="label">
             Username

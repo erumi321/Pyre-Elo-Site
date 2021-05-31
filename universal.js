@@ -11,18 +11,28 @@ var firebaseConfig = {
   firebase.initializeApp(firebaseConfig);
   var db = firebase.firestore();
 
-function getCookie(cname) {
-    var name = cname + "=";
-    var decodedCookie = decodeURIComponent(document.cookie);
-    var ca = decodedCookie.split(';');
-    for(var i = 0; i <ca.length; i++) {
-        var c = ca[i];
-        while (c.charAt(0) == ' ') {
-            c = c.substring(1);
-        }
-        if (c.indexOf(name) == 0) {
-            return c.substring(name.length, c.length);
-        }
-    }
-    return "";
+  function universalSetup(){
+      if (localStorage.getItem("username") != null || localStorage.getItem("username") == "") {
+        document.getElementById("topnav--loginbtn").innerHTML = "Profile";
+        document.getElementById("topnav--loginbtn").setAttribute("href", "../profile/profile.html");
+      }else{
+        document.getElementById("topnav--loginbtn").innerHTML = "Log-In / Register";
+        document.getElementById("topnav--loginbtn").setAttribute("href", "../log-in/log-in.html");
+      }
   }
+
+  function reverseObject(object) {
+    var newObject = {};
+    var keys = [];
+
+    for (var key in object) {
+        keys.push(key);
+    }
+
+    for (var i = keys.length - 1; i >= 0; i--) {
+        var value = object[keys[i]];
+        newObject[keys[i]]= value;
+    }       
+
+    return newObject;
+}

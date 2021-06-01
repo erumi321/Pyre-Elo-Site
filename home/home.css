@@ -103,29 +103,6 @@
   -webkit-transform: translateY(-4rem);
   transform: translateY(-4rem);
 }
-.confirmbutton {
-    font-family: 'Ubuntu', sans-serif;
-    width: 120px;
-    height: 40px;
-    line-height: 1;
-    font-size: 18px;
-    font-weight: bold;
-    letter-spacing: 1px;
-    border: 3px solid #8C82FC;
-    background: #fff;
-    color: #8C82FC;
-    border-radius: 40px;
-    cursor: pointer;
-    overflow: hidden;
-    transition: 0.3s ease-in-out;
-    transform: translateY(-10px);
-}
-  
-.confirmbutton:hover{
-    background: #8C82FC;
-    color: #fff;
-    transition: 0.3s ease-in-out;
-}
 
 .toggle-btn
 {

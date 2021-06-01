@@ -30,7 +30,7 @@ function buildMatchHistory() {
                         card.children[2].children[1].innerHTML = "Win(" + eval(-1 * match.data().ratingChange) + ")";
                     }
                     card.children[3].innerHTML = match.data().date;
-                    document.getElementById("matchhistorylist").appendChild(historycardholder);
+                    document.getElementById("matchhistorylist").children[0].appendChild(historycardholder);
                 })
             })
         });
@@ -38,4 +38,30 @@ function buildMatchHistory() {
     .catch((error) => {
         console.log("Error getting documents: ", error);
     });
+}
+
+function deleteAccount() {
+    if (prompt("Type your username here to permanetly delete this Account (" + localStorage.getItem("username") + ")") == localStorage.getItem("username")){
+        db.collection("cities").doc("DC").delete().then(() => {
+            console.log("Document successfully deleted!");
+        }).catch((error) => {
+            console.error("Error removing document: ", error);
+        });
+
+        db.collection("users").where("username", "==", localStorage.getItem('username'))
+        .get()
+        .then((querySnapshot) => {
+            querySnapshot.forEach((user) => {
+                db.collection("users").doc(user.id).delete().then(() => {
+                    console.log("user successfully deleted!");
+                    logout();
+                }).catch((error) => {
+                    console.error("Error removing document: ", error);
+                });
+            });
+        })
+        .catch((error) => {
+            console.log("Error getting documents: ", error);
+        });
+    }
 }

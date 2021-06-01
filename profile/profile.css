@@ -5,17 +5,34 @@
     place-items: center;
 }
 
+.logoutBtn {
+    margin-top: 66px;
+}
+
+.historylist--container {
+    display: inline-block;
+}
+
+.matchhistorylist {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 .historycard--holder {
     place-items: center;
-    display:flex;
+    display:block;
 }
 
 .historycard {
     margin: 1px 10px 0px 10px;
-        width: 330px;
+    width: 330px;
     display: flex;
     flex-direction: row;
-    background-color: #ddd;
+    background-color: #fff;
+    border: solid #201f73;
+    border-width: 2px 2px;
+    border-radius: 5px;
     text-align: center;
     box-sizing: border-box;
     padding: 0px 10px 0px 0px;
@@ -43,6 +60,24 @@
 
 .main--date {
     margin: auto 0;
+}
+
+.confirmbutton--red {
+    border: 3px solid red;
+    color: red;
+}
+
+.confirmbutton--red:hover{
+    background: red;
+    color: #fff;
+    transition: 0.3s ease-in-out;
+}
+
+.deletebutton {
+    display: block;
+    margin-top: 10px;
+    font-size: 0.6rem;
+    white-space: nowrap;
 }
 
 .hidden {

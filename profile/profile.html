@@ -1,9 +1,8 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <link rel="stylesheet" href="profile.css">
         <link rel="stylesheet" href="../universal.css">
-        
+        <link rel="stylesheet" href="profile.css">
         <title>Page Title</title>
 
             <!--Firebase Integration-->
@@ -17,25 +16,47 @@
         <script src="../universal.js"></script>
         <script src="profile.js"></script>
     </head>
-    <body onload="universalSetup(); buildMatchHistory();">
+    <body onload=""> <!--universalSetup(); buildMatchHistory();-->
         <div class="topnav">
             <div class="left">
                 <a href="../home/home.html">Home</a>
             </div>
             <div class="right">
                 <a href="#contact">Contact</a>
-                <a class = "active" href="../profile/profile.html" id="topnav--loginbtn">Profile</a>
+                <a class="active" href="../profile/profile.html" id="topnav--loginbtn">Profile</a>
             </div>
         </div>
-        <button class="logoutBtn" onClick="logout()" id="logoutBtn">
-            Log Out
-        </button>
+        <div class="int--col">
+            <button class="confirmbutton logoutBtn" onclick="logout()">
+                <span>Log Out</span>
+            </button>
+            <button class="confirmbutton--red confirmbutton deletebutton" onclick="deleteAccount()">
+                <span>Delete Account</span>
+            </button>
+        </div>
         <ul class="matchhistorylist" id="matchhistorylist">
-
+            <div class="int--col">
+                <div class="historycard--holder" id="basehistorycard">
+                    <div class="historycard">
+                        <div class="historycard--sidebar">
+                            <img src="icons/moddedIcon512512.png" alt="" class="historycard--image">
+                        </div>
+                        <div class="main--playercol">
+                            <h2 class="profile--name">p1</h2>
+                            <h2 class="profile--name">p2</h2>
+                        </div>
+                        <div class="main--result">
+                            <p class="main--scoretext">Win (+10)</p>
+                            <p class="main--scoretext">Lose (-10)</p>
+                        </div>
+                        <p class="main--date">
+                            01/01/1990
+                        </p>
+                    </div> 
+                </div>
+            </div>
         </ul>
-        
     </body>
-
 </html>
 
 <div class="historycard--holder hidden" id="basehistorycard">

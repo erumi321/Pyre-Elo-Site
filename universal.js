@@ -15,9 +15,11 @@ var firebaseConfig = {
       if (localStorage.getItem("username") != null || localStorage.getItem("username") == "") {
         document.getElementById("topnav--loginbtn").innerHTML = "Profile";
         document.getElementById("topnav--loginbtn").setAttribute("href", "profile.html");
+        document.getElementById("topnav--loginbtn").setAttribute("onlick", "window.open('profile.html', '_self');")
       }else{
         document.getElementById("topnav--loginbtn").innerHTML = "Log-In / Register";
         document.getElementById("topnav--loginbtn").setAttribute("href", "log-in.html");
+        document.getElementById("topnav--loginbtn").setAttribute("onlick", "window.open('log-in.html', '_self');")
       }
   }
 

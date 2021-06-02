@@ -65,9 +65,12 @@
                             Logged in as: 
                         </p>
                     </div>
-                    <div class="form--group">
+                    <div class="form--group int--label">
                         <input type="text" class="form--input" id="oppnamefield" placeholder="Opponent's Username" required="" onchange="updateOppName()"/>
-                        <label for="name" class="form--label">Opponent's Username</label>
+                        <div class="suggestions--container">
+                            <div class="suggestions suggestions--hidden" id="suggestions">
+                            </div>
+                        </div>
                     </div>
                     <div class="mainupdate">
                         <button class="confirmbutton int--label" onclick="submitNewValues()">
@@ -106,10 +109,13 @@
         </div>
     </div>
     <script>
-        var username = "";
+var username = "";
 var oppName = ""
 var isWin = true
 var modded = false;
+var userList = {}
+var searchInput = document.getElementById("oppnamefield");
+var suggestionPanel = document.getElementById("suggestions");
 
 function homeSetup() {
     username = localStorage.getItem("username");
@@ -119,10 +125,40 @@ function homeSetup() {
         document.getElementById("herobutton--profile").setAttribute("onlick", "window.open('log-in.html', '_self');")
         document.getElementById("herobutton--profile--text").innerHTML = "Log In / Sign Up";
     }else{
-        document.getElementById("name--label").innerHTML = "Logged in as: " + username;
-        
+        document.getElementById("name--label").innerHTML = "Logged in as: " + username;   
     }
-    
+    db.collection("users").where("username", "!=", username)
+    .get()
+    .then((querySnapshot) => {
+        userList = querySnapshot.docs;
+    });
+}
+
+searchInput.addEventListener("keyup", function() {
+    var input = searchInput.value;
+    suggestionPanel.innerHTML = "";
+    if (input != null && input != "") {
+        var suggestions = userList.filter(function(user){
+            return user.data().username.toLowerCase().startsWith(input.toLowerCase());
+        });
+        if (suggestions.length > 0){
+            suggestionPanel.classList.remove("suggestions--hidden");
+        }
+        suggestions.forEach((user) => {
+            var div = document.createElement("div");
+            div.innerHTML = user.data().username;
+            div.setAttribute("onclick", "setOppName('" + user.data().username + "');")
+            suggestionPanel.appendChild(div);
+        })
+    }else{
+        suggestionPanel.classList.add("suggestions--hidden");
+    }
+})
+
+function setOppName(name) {
+    console.log(name);
+    oppName = name;
+    document.getElementById("oppnamefield").value = name;
 }
 
 function updateOppName() {

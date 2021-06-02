@@ -67,3 +67,44 @@
 .name--label {
     font-size: 175%;
 }
+
+.suggestions--container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 120%;
+    margin: 10px 0;
+}
+
+.suggestions {
+    border: 2px solid #8C82FC;
+    border-radius: 20px;
+    width: 70%;
+}
+
+.suggestions div {
+    padding: 0px 5px 5px 5px;
+    font-size: 1rem;
+    border-bottom: 1px solid #c5bfff;
+    cursor: pointer; 
+}
+
+.suggestions div:first-child {
+    border-radius: 20px 20px 0 0;
+}
+
+.suggestions div:last-child {
+    border-radius: 0 0 20px 20px;
+}
+
+.suggestions div:only-child {
+    border-radius: 20px 20px 20px 20px;
+}
+
+.suggestions div:hover {
+    background: #ddd;
+}
+
+.suggestions--hidden {
+    border: 0px;
+}

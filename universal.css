@@ -82,7 +82,7 @@ html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockq
 }
 
 .form--group {
-    transform: scale(0.66);
+    transform: scale(1);
 }
 
 .form--label {
@@ -100,20 +100,13 @@ html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockq
   color: #333;
   font-size: 1.2rem;
   margin: 0 auto;
-  padding: 1.5rem 2rem;
+  padding: 1.5rem 0rem;
   border-radius: 0.2rem;
   background-color: rgb(255, 255, 255);
-  width: 90%;
+  width:120%;
   display: block;
   border-style: solid;
   transition: all 0.3s;
-}
-
-.form--input:placeholder-shown + .form--label {
-  opacity: 0;
-  visibility: hidden;
-  -webkit-transform: translateY(-4rem);
-  transform: translateY(-4rem);
 }
 
 .toggle-btn
@@ -189,4 +182,8 @@ input[type="checkbox"]
 
 .int--label {
     display: inline-block;
+}
+
+.hidden {
+    display: none;
 }

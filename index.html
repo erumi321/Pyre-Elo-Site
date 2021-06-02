@@ -15,7 +15,7 @@
 <script src="https://www.gstatic.com/firebasejs/8.6.2/firebase-functions.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.6.2/firebase-storage.js"></script>
 <script src="universal.js"></script>
-<script src="home/home.js"></script>
+<!-- <script src="home/home.js"></script> -->
 </head>
 <body onload="universalSetup();homeSetup();">
     <div class="topnav">
@@ -103,5 +103,131 @@
             </div>
         </div>
     </div>
+    <script>
+        var username = "";
+var oppName = ""
+var isWin = true
+var modded = false;
+
+function homeSetup() {
+    username = localStorage.getItem("username");
+    console.log(username);
+    if (username == null){
+        document.getElementById("name--label").innerHTML = "Not signed in";
+        document.getElementById("herobutton--profile").setAttribute("href", "log-in.html");
+        document.getElementById("herobutton--profile").setAttribute("onlick", "window.open('log-in.html', '_self');")
+        document.getElementById("herobutton--profile--text").innerHTML = "Log In / Sign Up";
+    }else{
+        document.getElementById("name--label").innerHTML = "Logged in as: " + username;
+        
+    }
+    
+}
+
+function updateOppName() {
+    oppName = document.getElementById("oppnamefield").value;
+}
+
+function setModded() {
+    modded = !modded
+}
+
+function setWin(){
+    isWin = !isWin;
+}
+function submitNewValues(){
+    if (oppName == "") {
+        return;
+    }
+    db.collection("users").where("username", "==", username)
+    .get()
+    .then((querySnapshot) => {
+        querySnapshot.forEach((player) => {
+            // doc.data() is never undefined for query doc snapshots
+            console.log(player.id, " => ", player.data());
+            var oppId = "";
+            db.collection("users").where("username", "==", oppName)
+            .get()
+            .then((oppSnapshot) => {
+                oppSnapshot.forEach((opp) => {
+                    console.log(opp.id, " => ", opp.data());
+                    var AS = player.data().rating;
+                    var BS = opp.data().rating;
+                    console.log(AS + " " + BS);
+                    var aD = eval("((" + AS + "+" + BS + ") / 2) / 10");
+                    console.log(aD);
+                    var aWinChange = eval("(" + AS + "/" + aD + ") * (" + BS + "/" + AS + ")");
+                    var bWinChange = eval("(" + BS + "/" + aD + ") * (" + AS + "/" + BS + ")");
+
+                    var changeA = 0;
+                    var changeB = 0;
+                    if (isWin == true) {
+                        changeA = aWinChange;
+                        changeB = eval("-1 * " + aWinChange)
+                    }else{
+                        changeA = eval("-1 * " + bWinChange);
+                        changeB = bWinChange
+                    }
+                    console.log(Math.round(changeA));
+                    console.log(Math.round(changeB));
+                    changeA = Math.round(changeA);
+                    changeB = Math.round(changeB);
+                    db.collection("users").doc(player.id).set({
+                        password: player.data().password,
+                        username: player.data().username,
+                        rating: Math.max(Math.round(player.data().rating + changeA), 1)
+                    })
+                    .then(() => {
+                        var d = new Date();
+                        console.log("User rating updated succesfully");
+                        document.getElementById("new--rating").innerHTML = "Your rating is: " + Math.round(player.data().rating + changeA)
+                        
+                        db.collection("users").doc(player.id).collection("matchHistory").add({
+                            opponent: opp.data().username,
+                            oppRating: opp.data().rating, //Rating at the time of match before score applied
+                            win: isWin,
+                            ratingChange: changeA,
+                            modded: modded,
+                            date: eval(d.getMonth() + 1) + "/" + d.getDate() + "/" + d.getFullYear(),
+                            timefrom: d.getTime()
+                        }).catch((error) => {
+                            console.error("Error adding new item to user history: ", error);
+                        });
+                    })
+                    .catch((error) => {
+                        console.error("Error writing document: ", error);
+                    });
+                    db.collection("users").doc(opp.id).set({
+                        password: opp.data().password,
+                        username: opp.data().username,
+                        rating: Math.max(Math.round(opp.data().rating + changeB), 1)
+                    })
+                    .then(() => {
+                        var d = new Date();
+                        db.collection("users").doc(opp.id).collection("matchHistory").add({
+                            opponent: player.data().username,
+                            oppRating: player.data().rating, //Rating at the time of match before score applied
+                            win: !isWin,
+                            ratingChange: changeB,
+                            modded: modded,
+                            date: eval(d.getMonth() + 1) + "/" + d.getDate() + "/" + d.getFullYear(),
+                            timefrom: d.getTime()
+                        }).catch((error) => {
+                            console.error("Error adding new item to opponent history: ", error);
+                        });
+                    })
+                    .catch((error) => {
+                        console.error("Error writing document: ", error);
+                    });
+                });
+            });
+        });
+    })
+    .catch((error) => {
+        console.log("Error getting documents: ", error);
+    });
+
+}
+    </script>
 </body>
 </html>

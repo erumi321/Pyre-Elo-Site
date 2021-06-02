@@ -23,8 +23,10 @@
             <a class="active" href="index.html" onclick="window.open('index.html', '_self');">Home</a>
         </div>
         <div class="right">
-            <!-- <a href="#contact">Contact</a> -->
-            <a href="profile.html" id="topnav--loginbtn" onclick="window.open('profile.html', '_self');">Profile</a>
+            <p class="int--label" id="scorelabel">
+                Score: 
+            </p>
+            <a href="profile.html" id="topnav--loginbtn" class="int--label" onclick="window.open('profile.html', '_self');">Profile</a>
         </div>
     </div>
     <div class="hero">
@@ -181,7 +183,8 @@ function submitNewValues(){
                         var d = new Date();
                         console.log("User rating updated succesfully");
                         document.getElementById("new--rating").innerHTML = "Your rating is: " + Math.round(player.data().rating + changeA)
-                        
+                        localStorage.setItem("rating", Math.round(player.data().rating + changeA));
+                        document.getElementById("scorelabel").innerHTML = "Score: " + currentRating;
                         db.collection("users").doc(player.id).collection("matchHistory").add({
                             opponent: opp.data().username,
                             oppRating: opp.data().rating, //Rating at the time of match before score applied

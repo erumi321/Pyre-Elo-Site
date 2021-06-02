@@ -16,14 +16,16 @@
         <script src="universal.js"></script>
         <!-- <script src="profile/profile.js"></script> -->
     </head>
-    <body onload=""> <!--universalSetup(); buildMatchHistory();-->
+    <body onload="universalSetup(); buildMatchHistory();"> 
         <div class="topnav">
             <div class="left">
                 <a href="index.html" onclick="window.open('index.html', '_self');">Home</a>
             </div>
             <div class="right">
-                <!-- <a href="#contact">Contact</a> -->
-                <a class="active" href="profile.html" id="topnav--loginbtn" onclick="window.open('profile.html', '_self');">Profile</a>
+                <p class="int--label" id="scorelabel">
+                    Score: 
+                </p>
+                <a href="profile.html" id="topnav--loginbtn" class="active int--label" onclick="window.open('profile.html', '_self');">Profile</a>
             </div>
         </div>
         <div class="int--col">
@@ -43,10 +45,6 @@
         </ul>
     </body>
     <script>
-        function logout() {
-    localStorage.removeItem("username");
-    window.open('index.html', '_self');
-}
 
 function buildMatchHistory() {
 
@@ -64,7 +62,7 @@ function buildMatchHistory() {
                     historycardholder.classList.remove("hidden");
                     var card = historycardholder.children[0];
                     console.log(match.data().modded);
-                    card.children[0].children[0].setAttribute("src", (!match.data().modded)? "icons/unmoddedIcon512512.png" : "icons/moddedIcon512512.png")
+                    card.children[0].children[0].setAttribute("src", (!match.data().modded)? "profile/icons/unmoddedIcon512512.png" : "profile/icons/moddedIcon512512.png")
                     card.children[1].children[0].innerHTML = user.data().username;
                     card.children[1].children[1].innerHTML = match.data().opponent;
                     if (match.data().win){
@@ -116,7 +114,7 @@ function deleteAccount() {
 <div class="historycard--holder hidden" id="basehistorycard">
     <div class="historycard">
         <div class="historycard--sidebar">
-            <img src="icons/moddedIcon512512.png" alt="" class="historycard--image">
+            <img src="profile/icons/moddedIcon512512.png" alt="" class="historycard--image">
         </div>
         <div class="main--playercol">
             <h2 class="profile--name">p1</h2>

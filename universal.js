@@ -11,13 +11,40 @@ var firebaseConfig = {
   firebase.initializeApp(firebaseConfig);
   var db = firebase.firestore();
 
+  var currentRating = localStorage.getItem("rating");
+
   function universalSetup(){
       if (localStorage.getItem("username") != null || localStorage.getItem("username") == "") {
-        document.getElementById("topnav--loginbtn").innerHTML = "Profile";
-        document.getElementById("topnav--loginbtn").setAttribute("href", "profile.html");
-        document.getElementById("topnav--loginbtn").setAttribute("onlick", "window.open('profile.html', '_self');")
+		  console.log(currentRating)
+		if (currentRating == null) {
+			db.collection("users").where("username", "==", localStorage.getItem("username"))
+			.get()
+			.then((querySnapshot) => {
+				querySnapshot.forEach((player) => {
+					console.log("Got val");
+					currentRating = player.data().rating;
+					localStorage.setItem("rating", player.data().rating);
+					document.getElementById("topnav--loginbtn").innerHTML = "Profile";
+					document.getElementById("scorelabel").innerHTML = "Score: " + currentRating;
+					document.getElementById("topnav--loginbtn").setAttribute("href", "profile.html");
+					document.getElementById("topnav--loginbtn").setAttribute("onlick", "window.open('profile.html', '_self');")
+				});
+			})
+			.catch((error) => {
+				console.log("Error getting documents: ", error);
+			});
+		}else{
+			console.log("Didnt get new val");
+			currentRating = localStorage.getItem("rating");
+			document.getElementById("topnav--loginbtn").innerHTML = "Profile";
+			document.getElementById("scorelabel").innerHTML = "Score: " + currentRating;
+			document.getElementById("topnav--loginbtn").setAttribute("href", "profile.html");
+			document.getElementById("topnav--loginbtn").setAttribute("onlick", "window.open('profile.html', '_self');")
+		}
+        
       }else{
         document.getElementById("topnav--loginbtn").innerHTML = "Log-In / Register";
+		document.getElementById("scorelabel").innerHTML = "";
         document.getElementById("topnav--loginbtn").setAttribute("href", "log-in.html");
         document.getElementById("topnav--loginbtn").setAttribute("onlick", "window.open('log-in.html', '_self');")
       }
@@ -37,6 +64,11 @@ var firebaseConfig = {
     }       
 
     return newObject;
+}
+
+function logout() {
+    localStorage.clear()
+    window.open('index.html', '_self');
 }
 
 var sha256 = function sha256(ascii) {

@@ -30,7 +30,7 @@ function logIn(){
             if (password == player.data().password) {
                 localStorage.setItem('username', player.data().username);
                 alert("Successfully Signed In");
-                document.location.href = "../index.html";
+                document.location.href = "index.html";
             }else{
                 alert("Wrong Password");
             }
@@ -71,7 +71,7 @@ function signUp(){
             console.log("Document written with ID: ", docRef.id);
             localStorage.setItem('username', username)
             alert("Success " + username + ", you have been signed in");
-            document.location.href = "../index.html";
+            document.location.href = "index.html";
         })
         .catch((error) => {
             console.error("Error adding document: ", error);

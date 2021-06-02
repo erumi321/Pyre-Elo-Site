@@ -106,8 +106,9 @@ function homeSetup() {
     console.log(username);
     if (username == null){
         document.getElementById("name--label").innerHTML = "Not signed in";
-        document.getElementById("herobutton--profile").setAttribute("href", "log-in.html")
-        document.getElementById("herobutton--profile--text").innerHTML = "Log In / Sign Up"
+        document.getElementById("herobutton--profile").setAttribute("href", "log-in.html");
+        document.getElementById("herobutton--profile").setAttribute("onlick", "window.open('log-in.html', '_self');")
+        document.getElementById("herobutton--profile--text").innerHTML = "Log In / Sign Up";
     }else{
         document.getElementById("name--label").innerHTML = "Logged in as: " + username;
         

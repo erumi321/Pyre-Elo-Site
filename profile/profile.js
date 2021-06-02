@@ -1,6 +1,6 @@
 function logout() {
     localStorage.removeItem("username");
-    document.location.href = "../index.html";
+    window.open('index.html', '_self');
 }
 
 function buildMatchHistory() {

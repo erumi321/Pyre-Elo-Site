@@ -64,6 +64,7 @@ function updateName() {
 }
 function updatePass() {
     password = document.getElementById("passfield").value;
+    console.log(sha256(password));
 }
 
 function changePassShow() {
@@ -85,7 +86,7 @@ function logIn(){
         var didPlayerPass = false;
         querySnapshot.forEach((player) => {
             didPlayerPass = true;
-            if (password == player.data().password) {
+            if (sha256(password) == player.data().password) {
                 localStorage.setItem('username', player.data().username);
                 alert("Successfully Signed In");
                 window.open('index.html', '_self');
@@ -122,7 +123,7 @@ function signUp(){
         }
         db.collection("users").add({
             username: username,
-            password: password,
+            password: sha256(password),
             rating: 1000
         })
         .then((docRef) => {

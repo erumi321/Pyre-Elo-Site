@@ -26,28 +26,32 @@
             <a class = "active" href="../profile/profile.html" id="topnav--loginbtn">Profile</a>
         </div>
     </div>
-    <div class="name--container">
-        <p class="label">
-            Username
-        </p>
-        <input type="text" class="namefield" id="namefield" onchange="updateName()">
-        </input>
-    </div>
-    <div class="pass--container">
-        <p class="label">
-            Password
-        </p>
-        <input type="text" class="passfield" id="passfield" onchange="updatePass()">
-        </input>
-    </div>
-    <p></p>
-    <div class="update--container">
+    <div class="customfield--container">
         <div class="int--col">
-            <button class="confirmBtn" onClick="logIn()">
-                <p>Log-In</p>
+            <div class="form--group formgroup--max">
+                <input type="text" class="form--input" id="namefield" placeholder="Username" onchange="updateName()"/>
+                <label for="name" class="form--label">Username</label>
+            </div>
+            <div class="form--group formgroup--max">
+                <input type="password" class="form--input" id="passfield" placeholder="Password" onchange="updatePass()"/>
+                <label for="name" class="form--label">Password</label>
+            </div>
+            <div class="showpass--area">
+                <p class="int--label showpass--label">
+                    Show Password?
+                </p>
+                <div class="toggle-btn int--label" id="_2nd-toggle-btn">
+                    <input type="checkbox" id="showpasscheck" onclick="changePassShow()">
+                    <span></span>
+                </div>
+            </div>
+        </div>
+        <div class="buttoncontainer">
+            <button class="confirmbutton confirmbutton--green" onclick="logIn()">
+                <span>Log In</span>
             </button>
-            <button class="confirmBtn" onClick="signUp()">
-                <p>Sign-Up</p>
+            <button class="confirmbutton confirmbutton--green" onclick="signUp()">
+                <span>Sign Up</span>
             </button>
         </div>
     </div>

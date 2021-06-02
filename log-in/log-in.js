@@ -7,7 +7,16 @@ function updateName() {
 function updatePass() {
     password = document.getElementById("passfield").value;
 }
-  
+
+function changePassShow() {
+    var checkbox = document.getElementById("showpasscheck");
+    if (checkbox.checked) {
+        document.getElementById("passfield").setAttribute("type", "text");
+    }else{
+        document.getElementById("passfield").setAttribute("type", "password");
+    }
+}
+
 function logIn(){
     if (username == "") {
         return;

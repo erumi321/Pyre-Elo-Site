@@ -136,13 +136,16 @@ function homeSetup() {
 
 searchInput.addEventListener("keyup", function() {
     var input = searchInput.value;
-    suggestionPanel.innerHTML = "";
+     suggestionPanel.innerHTML = "";
     if (input != null && input != "") {
         var suggestions = userList.filter(function(user){
             return user.data().username.toLowerCase().startsWith(input.toLowerCase());
         });
         if (suggestions.length > 0){
             suggestionPanel.classList.remove("suggestions--hidden");
+            if (suggestions.length > 6){
+                suggestions = suggestions.slice(0,6); 
+            }
         }
         suggestions.forEach((user) => {
             var div = document.createElement("div");
@@ -156,7 +159,6 @@ searchInput.addEventListener("keyup", function() {
 })
 
 function setOppName(name) {
-    console.log(name);
     oppName = name;
     document.getElementById("oppnamefield").value = name;
 }

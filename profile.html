@@ -61,7 +61,6 @@ function buildMatchHistory() {
                     var historycardholder = document.getElementById("basehistorycard").cloneNode(true);
                     historycardholder.classList.remove("hidden");
                     var card = historycardholder.children[0];
-                    console.log(match.data().modded);
                     card.children[0].children[0].setAttribute("src", (!match.data().modded)? "profile/icons/unmoddedIcon512512.png" : "profile/icons/moddedIcon512512.png")
                     card.children[1].children[0].innerHTML = user.data().username;
                     card.children[1].children[1].innerHTML = match.data().opponent;
@@ -79,24 +78,17 @@ function buildMatchHistory() {
         });
     })
     .catch((error) => {
-        console.log("Error getting documents: ", error);
+        console.error("Error getting documents: ", error);
     });
 }
 
 function deleteAccount() {
     if (prompt("Type your username here to permanetly delete this Account (" + localStorage.getItem("username") + ")") == localStorage.getItem("username")){
-        db.collection("cities").doc("DC").delete().then(() => {
-            console.log("Document successfully deleted!");
-        }).catch((error) => {
-            console.error("Error removing document: ", error);
-        });
-
         db.collection("users").where("username", "==", localStorage.getItem('username'))
         .get()
         .then((querySnapshot) => {
             querySnapshot.forEach((user) => {
                 db.collection("users").doc(user.id).delete().then(() => {
-                    console.log("user successfully deleted!");
                     logout();
                 }).catch((error) => {
                     console.error("Error removing document: ", error);
@@ -104,7 +96,7 @@ function deleteAccount() {
             });
         })
         .catch((error) => {
-            console.log("Error getting documents: ", error);
+            console.error("Error getting documents: ", error);
         });
     }
 }

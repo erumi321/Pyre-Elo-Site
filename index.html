@@ -113,7 +113,6 @@ var modded = false;
 
 function homeSetup() {
     username = localStorage.getItem("username");
-    console.log(username);
     if (username == null){
         document.getElementById("name--label").innerHTML = "Not signed in";
         document.getElementById("herobutton--profile").setAttribute("href", "log-in.html");
@@ -146,18 +145,14 @@ function submitNewValues(){
     .then((querySnapshot) => {
         querySnapshot.forEach((player) => {
             // doc.data() is never undefined for query doc snapshots
-            console.log(player.id, " => ", player.data());
             var oppId = "";
             db.collection("users").where("username", "==", oppName)
             .get()
             .then((oppSnapshot) => {
                 oppSnapshot.forEach((opp) => {
-                    console.log(opp.id, " => ", opp.data());
                     var AS = player.data().rating;
                     var BS = opp.data().rating;
-                    console.log(AS + " " + BS);
                     var aD = eval("((" + AS + "+" + BS + ") / 2) / 10");
-                    console.log(aD);
                     var aWinChange = eval("(" + AS + "/" + aD + ") * (" + BS + "/" + AS + ")");
                     var bWinChange = eval("(" + BS + "/" + aD + ") * (" + AS + "/" + BS + ")");
 
@@ -170,8 +165,6 @@ function submitNewValues(){
                         changeA = eval("-1 * " + bWinChange);
                         changeB = bWinChange
                     }
-                    console.log(Math.round(changeA));
-                    console.log(Math.round(changeB));
                     changeA = Math.round(changeA);
                     changeB = Math.round(changeB);
                     db.collection("users").doc(player.id).set({
@@ -181,7 +174,6 @@ function submitNewValues(){
                     })
                     .then(() => {
                         var d = new Date();
-                        console.log("User rating updated succesfully");
                         document.getElementById("new--rating").innerHTML = "Your rating is: " + Math.round(player.data().rating + changeA)
                         localStorage.setItem("rating", Math.round(player.data().rating + changeA));
                         document.getElementById("scorelabel").innerHTML = "Score: " + currentRating;
@@ -227,7 +219,7 @@ function submitNewValues(){
         });
     })
     .catch((error) => {
-        console.log("Error getting documents: ", error);
+        console.error("Error getting documents: ", error);
     });
 
 }

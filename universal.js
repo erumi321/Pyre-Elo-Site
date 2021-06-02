@@ -15,13 +15,11 @@ var firebaseConfig = {
 
   function universalSetup(){
       if (localStorage.getItem("username") != null || localStorage.getItem("username") == "") {
-		  console.log(currentRating)
 		if (currentRating == null) {
 			db.collection("users").where("username", "==", localStorage.getItem("username"))
 			.get()
 			.then((querySnapshot) => {
 				querySnapshot.forEach((player) => {
-					console.log("Got val");
 					currentRating = player.data().rating;
 					localStorage.setItem("rating", player.data().rating);
 					document.getElementById("topnav--loginbtn").innerHTML = "Profile";
@@ -31,10 +29,9 @@ var firebaseConfig = {
 				});
 			})
 			.catch((error) => {
-				console.log("Error getting documents: ", error);
+				console.error("Error getting documents: ", error);
 			});
 		}else{
-			console.log("Didnt get new val");
 			currentRating = localStorage.getItem("rating");
 			document.getElementById("topnav--loginbtn").innerHTML = "Profile";
 			document.getElementById("scorelabel").innerHTML = "Score: " + currentRating;

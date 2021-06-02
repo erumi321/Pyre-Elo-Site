@@ -66,7 +66,6 @@ function updateName() {
 }
 function updatePass() {
     password = document.getElementById("passfield").value;
-    console.log(sha256(password));
 }
 
 function changePassShow() {
@@ -98,7 +97,7 @@ function logIn(){
         });
     })
     .catch((error) => {
-        console.log("Error getting documents: ", error);
+        console.error("Error getting documents: ", error);
     });
 
 }
@@ -117,9 +116,7 @@ function signUp(){
                 isUsed = true;
                 return;
             }
-            console.log(user.id);
         });
-        console.log("done");
         if (isUsed){
             return;
         }
@@ -129,7 +126,6 @@ function signUp(){
             rating: 1000
         })
         .then((docRef) => {
-            console.log("Document written with ID: ", docRef.id);
             localStorage.setItem('username', username)
             alert("Success " + username + ", you have been signed in");
             window.open('index.html', '_self');
@@ -139,7 +135,7 @@ function signUp(){
         });
     })
     .catch((error) => {
-        console.log("Error getting documents: ", error);
+        console.error("Error getting documents: ", error);
     });
     
 }

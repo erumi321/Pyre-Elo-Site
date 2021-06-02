@@ -104,7 +104,15 @@ var modded = false;
 function homeSetup() {
     username = localStorage.getItem("username");
     console.log(username);
-    document.getElementById("name--label").innerHTML = (username != null) ? "Logged in as: " + username : "Not signed in"; 
+    if (username == null){
+        document.getElementById("name--label").innerHTML = "Not signed in";
+        document.getElementById("herobutton--profile").setAttribute("href", "log-in.html")
+        document.getElementById("herobutton--profile--text").innerHTML = "Log In / Sign Up"
+    }else{
+        document.getElementById("name--label").innerHTML = "Logged in as: " + username;
+        
+    }
+    
 }
 
 function updateOppName() {

@@ -14,10 +14,10 @@ var firebaseConfig = {
   function universalSetup(){
       if (localStorage.getItem("username") != null || localStorage.getItem("username") == "") {
         document.getElementById("topnav--loginbtn").innerHTML = "Profile";
-        document.getElementById("topnav--loginbtn").setAttribute("href", "profile.html");
+        document.getElementById("topnav--loginbtn").setAttribute("href", "/profile.html");
       }else{
         document.getElementById("topnav--loginbtn").innerHTML = "Log-In / Register";
-        document.getElementById("topnav--loginbtn").setAttribute("href", "log-in.html");
+        document.getElementById("topnav--loginbtn").setAttribute("href", "/log-in.html");
       }
   }
 

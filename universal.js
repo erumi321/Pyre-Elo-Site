@@ -14,37 +14,49 @@ var firebaseConfig = {
   var currentRating = localStorage.getItem("rating");
 
   function universalSetup(){
-      if (localStorage.getItem("username") != null || localStorage.getItem("username") == "") {
-		if (currentRating == null) {
-			db.collection("users").where("username", "==", localStorage.getItem("username"))
-			.get()
-			.then((querySnapshot) => {
-				querySnapshot.forEach((player) => {
-					currentRating = player.data().rating;
-					localStorage.setItem("rating", player.data().rating);
-					document.getElementById("topnav--loginbtn").innerHTML = "Profile";
-					document.getElementById("scorelabel").innerHTML = "Score: " + currentRating;
-					document.getElementById("topnav--loginbtn").setAttribute("href", "profile.html");
-					document.getElementById("topnav--loginbtn").setAttribute("onlick", "window.open('profile.html', '_self');")
-				});
-			})
-			.catch((error) => {
-				console.error("Error getting documents: ", error);
-			});
-		}else{
-			currentRating = localStorage.getItem("rating");
-			document.getElementById("topnav--loginbtn").innerHTML = "Profile";
-			document.getElementById("scorelabel").innerHTML = "Score: " + currentRating;
-			document.getElementById("topnav--loginbtn").setAttribute("href", "profile.html");
-			document.getElementById("topnav--loginbtn").setAttribute("onlick", "window.open('profile.html', '_self');")
+	if (localStorage.getItem("username") != null || localStorage.getItem("username") == "" || localStorage.getItem("password") != null || localStorage.getItem("password") == "") {
+	  db.collection("users")
+	  .where("username", "==", localStorage.getItem("username"))
+	  .where("password", "==", sha256(localStorage.getItem("password")))
+	  .get()
+	  .then((querySnapshot) => {
+		if (querySnapshot.docs == null || querySnapshot.docs.length == 0) {
+			alert("Inccorrect log-in, don't do that man");
+			logout();
+			return;
 		}
-        
-      }else{
-        document.getElementById("topnav--loginbtn").innerHTML = "Log-In / Register";
+			if (currentRating == null) {
+				db.collection("users").where("username", "==", localStorage.getItem("username"))
+				.get()
+				.then((querySnapshot) => {
+					querySnapshot.forEach((player) => {
+						currentRating = player.data().rating;
+						localStorage.setItem("rating", player.data().rating);
+						document.getElementById("topnav--loginbtn").innerHTML = "Profile";
+						document.getElementById("scorelabel").innerHTML = "Score: " + currentRating;
+						document.getElementById("topnav--loginbtn").setAttribute("href", "profile.html");
+						document.getElementById("topnav--loginbtn").setAttribute("onlick", "window.open('profile.html', '_self');")
+					});
+				})
+				.catch((error) => {
+					console.error("Error getting documents: ", error);
+				});
+			}else{
+				currentRating = localStorage.getItem("rating");
+				document.getElementById("topnav--loginbtn").innerHTML = "Profile";
+				document.getElementById("scorelabel").innerHTML = "Score: " + currentRating;
+				document.getElementById("topnav--loginbtn").setAttribute("href", "profile.html");
+				document.getElementById("topnav--loginbtn").setAttribute("onlick", "window.open('profile.html', '_self');")
+			}
+			
+
+	  });
+	}else{
+		document.getElementById("topnav--loginbtn").innerHTML = "Log-In / Register";
 		document.getElementById("scorelabel").innerHTML = "";
-        document.getElementById("topnav--loginbtn").setAttribute("href", "log-in.html");
-        document.getElementById("topnav--loginbtn").setAttribute("onlick", "window.open('log-in.html', '_self');")
-      }
+		document.getElementById("topnav--loginbtn").setAttribute("href", "log-in.html");
+		document.getElementById("topnav--loginbtn").setAttribute("onlick", "window.open('log-in.html', '_self');")
+	  }
   }
 
   function reverseObject(object) {

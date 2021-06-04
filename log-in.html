@@ -87,6 +87,7 @@ function logIn(){
             didPlayerPass = true;
             if (sha256(password) == player.data().password) {
                 localStorage.setItem('username', player.data().username);
+                localStorage.setItem('password', password);
                 alert("Successfully Signed In");
                 window.open('index.html', '_self');
             }else{

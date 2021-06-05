@@ -8,9 +8,11 @@ html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockq
     background: transparent;
 }
 
-/* Add a black background color to the top navigation */
+body.hidden * {
+    opacity: 0%;
+}
+
 .topnav {
-    background-color: #0b0a26;
     overflow: hidden;
     position: fixed; /* Set the navbar to fixed position */
     top: 0; /* Position the navbar at the top of the page */
@@ -26,31 +28,16 @@ html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockq
     float: right;
 }
 
-/* Style the links inside the navigation bar */
 .topnav a {
     float: left;
-    color: #f2f2f2;
     text-align: center;
     padding: 14px 16px;
     text-decoration: none;
     font-size: 17px;
 }
 
-/* Change the color of links on hover */
-.topnav a:hover {
-    background-color: #ddd;
-    color: black;
-}
-
-/* Add a color to the active/current link */
-.topnav a.active {
-    background-color: #6f6cde;
-    color: white;
-}
-
 .topnav p {
     float: left;
-    color: #f2f2f2;
     text-align: center;
     padding: 14px 16px;
     text-decoration: none;
@@ -65,9 +52,6 @@ html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockq
     font-size: 18px;
     font-weight: bold;
     letter-spacing: 1px;
-    border: 3px solid #8C82FC;
-    background: #fff;
-    color: #8C82FC;
     border-radius: 40px;
     cursor: pointer;
     overflow: hidden;
@@ -76,8 +60,6 @@ html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockq
 }
   
 .confirmbutton:hover{
-    background: #8C82FC;
-    color: #fff;
     transition: 0.3s ease-in-out;
 }
 
@@ -91,22 +73,19 @@ html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockq
   margin-left: 2rem;
   margin-top: 0.7rem;
   display: block;
-  transition: all 0.3s;
   transform: translateY(0rem);
 }
 
 .form--input {
   font-family: 'Roboto', sans-serif;
-  color: #333;
   font-size: 1.2rem;
   margin: 0 auto;
   padding: 1.5rem 0rem;
+  margin-bottom: 20px;
   border-radius: 0.2rem;
-  background-color: rgb(255, 255, 255);
   width:120%;
   display: block;
   border-style: solid;
-  transition: all 0.3s;
 }
 
 .toggle-btn
@@ -141,10 +120,7 @@ input[type="checkbox"]
     right: 0px;
     bottom: 0px;
     left: 0px;
-    border: 2px solid #b3b3b3;
-    border-color: #b3b3b3;
     overflow: hidden;
-    background-color: #fff;
     border-radius: 8px;
     transition: 0.8s ease border-color;
     transform: translateY(2px);
@@ -159,20 +135,14 @@ input[type="checkbox"]
     height: 12px;
     border-width: 2px;
     border-style: solid;
-    border-color: #b3b3b3;
     margin-left: 0px;
     border-radius: 50%;
     transform: translate(-2px,5px);
     transition: 0.4s ease border-radius, 0.4s ease transform, 0.6s ease width, 0.6s ease margin-left, 0.8s ease border-color;
 }
-#_2nd-toggle-btn input[type="checkbox"]:checked + span
-{
-    border-color: #8C82FC;
-}
 
 #_2nd-toggle-btn input[type="checkbox"]:checked + span:before
 {
-    border-color: #8C82FC;
     transform: translate(-15px,5.5px);
 }
 
@@ -182,6 +152,20 @@ input[type="checkbox"]
 
 .int--label {
     display: inline-block;
+}
+
+.flex--right {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.flex--between {
+    display: flex;
+    justify-content: space-between;
+}
+
+.confirmbutton--green:hover{
+    transition: 0.3s ease-in-out;
 }
 
 .hidden {

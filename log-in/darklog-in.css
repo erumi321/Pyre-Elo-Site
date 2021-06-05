@@ -1,0 +1,10 @@
+#_2nd-toggle-btn input[type="checkbox"]:checked + span
+{
+    border-color: green;
+}
+
+#_2nd-toggle-btn input[type="checkbox"]:checked + span:before
+{
+    border-color: green;
+    transform: translate(-3px,5px);
+}

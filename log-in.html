@@ -2,7 +2,9 @@
 <html>
 <head>
     <link rel="stylesheet" href="universal.css">
+    <link rel="stylesheet" href="lightuniversal.css" id="universal--theme">
     <link rel="stylesheet" href="log-in/log-in.css">
+    <link rel="stylesheet" href="log-in/log-in.css" id="page--theme">
     <title>Page Title</title>
 
     <!--Firebase Integration-->
@@ -16,7 +18,7 @@
 <script src="universal.js"></script>
 <!-- <script src="log-in/log-in.js"></script> -->
 </head>
-<body onload="universalSetup()">
+<body class="hidden" onload="universalSetup(); updateTheme('log-in');">
     <div class="topnav">
         <div class="left">
             <a href="index.html" onclick="window.open('index.html', '_self');">Home</a>
@@ -57,7 +59,7 @@
     </div>
     <script>
         var username = ""
-var password = ""
+        var password = ""
 
 function updateName() {
     username = document.getElementById("namefield").value;

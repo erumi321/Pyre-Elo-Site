@@ -14,6 +14,9 @@ var firebaseConfig = {
   var currentRating = localStorage.getItem("rating");
 
   function universalSetup(){
+	  if (localStorage.getItem("theme") == null) {
+		  localStorage.setItem("theme", "light");
+	  }
 	if (localStorage.getItem("username") != null || localStorage.getItem("username") == "" || localStorage.getItem("password") != null || localStorage.getItem("password") == "") {
 	  db.collection("users")
 	  .where("username", "==", localStorage.getItem("username"))
@@ -78,6 +81,12 @@ var firebaseConfig = {
 function logout() {
     localStorage.clear()
     window.open('index.html', '_self');
+}
+
+function updateTheme(pageName)  {
+	document.getElementById("universal--theme").setAttribute("href", localStorage.getItem("theme")+"universal.css");
+	document.getElementById("page--theme").setAttribute("href", pageName + "/"+localStorage.getItem("theme") + pageName + ".css");
+	setTimeout(() => {document.body.classList.remove("hidden"); }, 200);
 }
 
 var sha256 = function sha256(ascii) {

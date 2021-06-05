@@ -1,0 +1,28 @@
+body {
+    background-color: center;
+}
+
+.historycard {
+    margin: 1px 10px 0px 10px;
+    width: 330px;
+    display: flex;
+    flex-direction: row;
+    background-color: #fff;
+    border: solid #201f73;
+    border-width: 2px 2px;
+    border-radius: 5px;
+    text-align: center;
+    box-sizing: border-box;
+    padding: 0px 10px 0px 0px;
+}
+
+.confirmbutton--red {
+    border: 3px solid red;
+    color: red;
+}
+
+.confirmbutton--red:hover{
+    background: red;
+    color: #fff;
+    transition: 0.3s ease-in-out;
+}

@@ -23,24 +23,8 @@
 {
     transform: translate(12px,5px);
 }
-#_2nd-toggle-btn input[type="checkbox"]:checked + span
-{
-    border-color: black;
-}
 
 #_2nd-toggle-btn input[type="checkbox"]:checked + span:before
 {
-    border-color: black;
     transform: translate(-3px,5px);
-}
-
-.confirmbutton--green {
-    border: 3px solid green;
-    color: green;
-}
-
-.confirmbutton--green:hover{
-    background: green;
-    color: #fff;
-    transition: 0.3s ease-in-out;
 }

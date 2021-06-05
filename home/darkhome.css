@@ -1,0 +1,28 @@
+@import url("https://fonts.googleapis.com/css?family=Montserrat&display=swap");
+/* Hero */
+.hero {
+    background: #121212;
+}
+
+.hero--buttonrow .hero--button {
+     box-shadow: -6px -6px 10px rgba(204, 83, 51, 0.2), 6px 6px 10px rgba(35, 7, 77, 0.2);
+	 color: #6f6cde;
+}
+
+.hero--button:hover {
+    background-color: #404040;
+    color: white;
+}
+
+/* Input */
+#suggestions {
+    border: 2px solid #606060;
+}
+
+.suggestions div {
+    border-bottom: 1px solid #606060;
+}
+
+.suggestions div:hover {
+    background: #404040 ;
+}

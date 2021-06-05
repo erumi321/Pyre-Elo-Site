@@ -1,0 +1,74 @@
+/* Add a black background color to the top navigation */
+.topnav {
+    background-color: #0b0a26;
+}
+
+/* Style the links inside the navigation bar */
+.topnav a {
+    color: #f2f2f2;
+}
+
+/* Change the color of links on hover */
+.topnav a:hover {
+    background-color: #ddd;
+    color: black;
+}
+
+/* Add a color to the active/current link */
+.topnav a.active {
+    background-color: #6f6cde;
+    color: white;
+}
+
+.topnav p {
+    color: #f2f2f2;
+}
+
+.confirmbutton {
+    border: 3px solid #8C82FC;
+    background: #fff;
+    color: #8C82FC;
+}
+  
+.confirmbutton:hover{
+    background: #8C82FC;
+    color: #fff;
+}
+
+.form--input {
+  color: #333;
+  background-color: rgb(255, 255, 255);
+}
+
+/* Second toggle btn */
+
+#_2nd-toggle-btn span
+{
+    border: 2px solid #b3b3b3;
+    border-color: #b3b3b3;
+    background-color: #fff;
+}
+
+#_2nd-toggle-btn span:before
+{
+    border-color: #b3b3b3;
+}
+#_2nd-toggle-btn input[type="checkbox"]:checked + span
+{
+    border-color: #8C82FC;
+}
+
+#_2nd-toggle-btn input[type="checkbox"]:checked + span:before
+{
+    border-color: #8C82FC;
+}
+
+.confirmbutton--green {
+    border: 3px solid green;
+    color: green;
+}
+
+.confirmbutton--green:hover{
+    background: green;
+    color: #fff;
+}

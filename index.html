@@ -3,7 +3,9 @@
 <head>
     <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
     <link rel="stylesheet" href="universal.css">
+    <link rel="stylesheet" href="lightuniversal.css" id="universal--theme">
     <link rel="stylesheet" href="home/home.css">
+    <link rel="stylesheet" href="home/lighthome.css" id="page--theme">
     <title>Page Title</title>
 
     <!--Firebase Integration-->
@@ -17,7 +19,7 @@
 <script src="universal.js"></script>
 <!-- <script src="home/home.js"></script> -->
 </head>
-<body onload="universalSetup();homeSetup();">
+<body class="hidden" onload="universalSetup();homeSetup();">
     <div class="topnav">
         <div class="left">
             <a class="active" href="index.html" onclick="window.open('index.html', '_self');">Home</a>
@@ -118,7 +120,7 @@ var searchInput = document.getElementById("oppnamefield");
 var suggestionPanel = document.getElementById("suggestions");
 
 function homeSetup() {
-    
+    updateTheme("home");
     username = localStorage.getItem("username");
     if (username == null){
         document.getElementById("name--label").innerHTML = "Not signed in";
@@ -147,7 +149,8 @@ function showSuggestions() {
 }
 
 function hideSuggestions() {
-    suggestionPanel.classList.add("suggestions--hidden");
+    setTimeout(() => {suggestionPanel.classList.add("suggestions--hidden"); }, 50);
+    
 }
 
 function updateSearch() {
@@ -183,7 +186,7 @@ function updateSearch() {
 
 function setOppName(name) {
     oppName = name;
-    document.getElementById("oppnamefield").value = name;
+    searchInput.value = name;
 }
 
 function updateOppName() {

@@ -14,9 +14,9 @@ var firebaseConfig = {
   var currentRating = localStorage.getItem("rating");
 
   function universalSetup(){
-	  if (localStorage.getItem("theme") == null) {
-		  localStorage.setItem("theme", "light");
-	  }
+	if (localStorage.getItem("theme") == null) {
+		localStorage.setItem("theme", "light");
+	}
 	if (localStorage.getItem("username") != null && localStorage.getItem("username") != "" && localStorage.getItem("password") != null && localStorage.getItem("password") != "") {
 	  db.collection("users")
 	  .where("username", "==", localStorage.getItem("username"))
@@ -29,30 +29,17 @@ var firebaseConfig = {
 			return;
 		}
 			if (currentRating == null) {
-				db.collection("users").where("username", "==", localStorage.getItem("username"))
-				.get()
-				.then((querySnapshot) => {
-					querySnapshot.forEach((player) => {
-						currentRating = player.data().rating;
-						localStorage.setItem("rating", player.data().rating);
-						document.getElementById("topnav--loginbtn").innerHTML = "Profile";
-						document.getElementById("scorelabel").innerHTML = "Score: " + currentRating;
-						document.getElementById("topnav--loginbtn").setAttribute("href", "profile.html");
-						document.getElementById("topnav--loginbtn").setAttribute("onlick", "window.open('profile.html', '_self');")
-					});
-				})
-				.catch((error) => {
-					console.error("Error getting documents: ", error);
+				querySnapshot.forEach((player) => {
+					currentRating = player.data().rating;
+					localStorage.setItem("rating", player.data().rating);
 				});
 			}else{
 				currentRating = localStorage.getItem("rating");
-				document.getElementById("topnav--loginbtn").innerHTML = "Profile";
-				document.getElementById("scorelabel").innerHTML = "Score: " + currentRating;
-				document.getElementById("topnav--loginbtn").setAttribute("href", "profile.html");
-				document.getElementById("topnav--loginbtn").setAttribute("onlick", "window.open('profile.html', '_self');")
 			}
-			
-
+			document.getElementById("topnav--loginbtn").innerHTML = "Profile";
+			document.getElementById("scorelabel").innerHTML = "Score: " + currentRating;
+			document.getElementById("topnav--loginbtn").setAttribute("href", "profile.html");
+			document.getElementById("topnav--loginbtn").setAttribute("onlick", "window.open('profile.html', '_self');")
 	  });
 	}else{
 		document.getElementById("topnav--loginbtn").innerHTML = "Log-In / Register";

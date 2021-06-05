@@ -17,7 +17,7 @@ var firebaseConfig = {
 	  if (localStorage.getItem("theme") == null) {
 		  localStorage.setItem("theme", "light");
 	  }
-	if (localStorage.getItem("username") != null || localStorage.getItem("username") == "" || localStorage.getItem("password") != null || localStorage.getItem("password") == "") {
+	if (localStorage.getItem("username") != null && localStorage.getItem("username") != "" && localStorage.getItem("password") != null && localStorage.getItem("password") != "") {
 	  db.collection("users")
 	  .where("username", "==", localStorage.getItem("username"))
 	  .where("password", "==", sha256(localStorage.getItem("password")))

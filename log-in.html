@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <link rel="stylesheet" href="universal.css">
     <link rel="stylesheet" href="lightuniversal.css" id="universal--theme">
@@ -8,16 +9,17 @@
     <title>Page Title</title>
 
     <!--Firebase Integration-->
-<script src="https://www.gstatic.com/firebasejs/8.6.2/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.6.2/firebase-firestore.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.6.2/firebase-auth.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.6.2/firebase-database.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.6.2/firebase-messaging.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.6.2/firebase-functions.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.6.2/firebase-storage.js"></script>
-<script src="universal.js"></script>
-<!-- <script src="log-in/log-in.js"></script> -->
+    <script src="https://www.gstatic.com/firebasejs/8.6.2/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.2/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.2/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.2/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.2/firebase-messaging.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.2/firebase-functions.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.2/firebase-storage.js"></script>
+    <script src="universal.js"></script>
+    <!-- <script src="log-in/log-in.js"></script> -->
 </head>
+
 <body class="hidden" onload="universalSetup(); updateTheme('log-in');">
     <div class="topnav">
         <div class="left">
@@ -25,18 +27,20 @@
         </div>
         <div class="right">
             <p class="int--label" id="scorelabel">
-                Score: 
+                Score:
             </p>
-            <a href="profile.html" id="topnav--loginbtn" class="active int--label" onclick="window.open('profile.html', '_self');">Profile</a>
+            <a href="profile.html" id="topnav--loginbtn" class="active int--label"
+                onclick="window.open('profile.html', '_self');">Profile</a>
         </div>
     </div>
     <div class="customfield--container">
         <div class="int--col">
             <div class="form--group formgroup--max">
-                <input type="text" class="form--input" id="namefield" placeholder="Username" onchange="updateName()"/>
+                <input type="text" class="form--input" id="namefield" placeholder="Username" onchange="updateName()" />
             </div>
             <div class="form--group formgroup--max">
-                <input type="password" class="form--input" id="passfield" placeholder="Password" onchange="updatePass()"/>
+                <input type="password" class="form--input" id="passfield" placeholder="Password"
+                    onchange="updatePass()" />
             </div>
             <div class="showpass--area">
                 <p class="int--label showpass--label">
@@ -61,85 +65,86 @@
         var username = ""
         var password = ""
 
-function updateName() {
-    username = document.getElementById("namefield").value;
-}
-function updatePass() {
-    password = document.getElementById("passfield").value;
-}
+        function updateName() {
+            username = document.getElementById("namefield").value;
+        }
+        function updatePass() {
+            password = document.getElementById("passfield").value;
+        }
 
-function changePassShow() {
-    var checkbox = document.getElementById("showpasscheck");
-    if (checkbox.checked) {
-        document.getElementById("passfield").setAttribute("type", "text");
-    }else{
-        document.getElementById("passfield").setAttribute("type", "password");
-    }
-}
-
-function logIn(){
-    if (username == "") {
-        return;
-    }
-    db.collection("users").where("username", "==", username)
-    .get()
-    .then((querySnapshot) => {
-        var didPlayerPass = false;
-        querySnapshot.forEach((player) => {
-            didPlayerPass = true;
-            if (sha256(password) == player.data().password) {
-                localStorage.setItem('username', player.data().username);
-                localStorage.setItem('password', password);
-                alert("Successfully Signed In");
-                window.open('index.html', '_self');
-            }else{
-                alert("Wrong Password");
+        function changePassShow() {
+            var checkbox = document.getElementById("showpasscheck");
+            if (checkbox.checked) {
+                document.getElementById("passfield").setAttribute("type", "text");
+            } else {
+                document.getElementById("passfield").setAttribute("type", "password");
             }
-        });
-    })
-    .catch((error) => {
-        console.error("Error getting documents: ", error);
-    });
+        }
 
-}
-
-function signUp(){
-    if (username == "" || password==""){
-        return;
-    }
-    db.collection("users")
-    .get()
-    .then((querySnapshot) => {
-        var isUsed = false;
-        querySnapshot.forEach((user) => {
-            if (user.data().username == username){
-                alert("Username in use");
-                isUsed = true;
+        function logIn() {
+            if (username == "") {
                 return;
             }
-        });
-        if (isUsed){
-            return;
+            db.collection("users").where("username", "==", username)
+                .get()
+                .then((querySnapshot) => {
+                    var didPlayerPass = false;
+                    querySnapshot.forEach((player) => {
+                        didPlayerPass = true;
+                        if (sha256(password) == player.data().password) {
+                            localStorage.setItem('username', player.data().username);
+                            localStorage.setItem('password', password);
+                            alert("Successfully Signed In");
+                            window.open('index.html', '_self');
+                        } else {
+                            alert("Wrong Password");
+                        }
+                    });
+                })
+                .catch((error) => {
+                    console.error("Error getting documents: ", error);
+                });
+
         }
-        db.collection("users").add({
-            username: username,
-            password: sha256(password),
-            rating: 1000
-        })
-        .then((docRef) => {
-            localStorage.setItem('username', username)
-            alert("Success " + username + ", you have been signed in");
-            window.open('index.html', '_self');
-        })
-        .catch((error) => {
-            console.error("Error adding document: ", error);
-        });
-    })
-    .catch((error) => {
-        console.error("Error getting documents: ", error);
-    });
-    
-}
+
+        function signUp() {
+            if (username == "" || password == "") {
+                return;
+            }
+            db.collection("users")
+                .get()
+                .then((querySnapshot) => {
+                    var isUsed = false;
+                    querySnapshot.forEach((user) => {
+                        if (user.data().username == username) {
+                            alert("Username in use");
+                            isUsed = true;
+                            return;
+                        }
+                    });
+                    if (isUsed) {
+                        return;
+                    }
+                    db.collection("users").add({
+                        username: username,
+                        password: sha256(password),
+                        rating: 1000
+                    })
+                        .then((docRef) => {
+                            localStorage.setItem('username', username)
+                            alert("Success " + username + ", you have been signed in");
+                            window.open('index.html', '_self');
+                        })
+                        .catch((error) => {
+                            console.error("Error adding document: ", error);
+                        });
+                })
+                .catch((error) => {
+                    console.error("Error getting documents: ", error);
+                });
+
+        }
     </script>
 </body>
+
 </html>

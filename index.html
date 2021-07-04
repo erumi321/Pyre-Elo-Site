@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
     <link rel="stylesheet" href="universal.css">
@@ -9,16 +10,17 @@
     <title>Page Title</title>
 
     <!--Firebase Integration-->
-<script src="https://www.gstatic.com/firebasejs/8.6.2/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.6.2/firebase-firestore.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.6.2/firebase-auth.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.6.2/firebase-database.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.6.2/firebase-messaging.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.6.2/firebase-functions.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.6.2/firebase-storage.js"></script>
-<script src="universal.js"></script>
-<!-- <script src="home/home.js"></script> -->
+    <script src="https://www.gstatic.com/firebasejs/8.6.2/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.2/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.2/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.2/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.2/firebase-messaging.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.2/firebase-functions.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.2/firebase-storage.js"></script>
+    <script src="universal.js"></script>
+    <!-- <script src="home/home.js"></script> -->
 </head>
+
 <body class="hidden" onload="universalSetup();homeSetup();">
     <div class="topnav">
         <div class="left">
@@ -27,9 +29,10 @@
         </div>
         <div class="right">
             <p class="int--label" id="scorelabel">
-                Score: 
+                Score:
             </p>
-            <a href="profile.html" id="topnav--loginbtn" class="int--label" onclick="window.open('profile.html', '_self');">Profile</a>
+            <a href="profile.html" id="topnav--loginbtn" class="int--label"
+                onclick="window.open('profile.html', '_self');">Profile</a>
         </div>
     </div>
     <div class="hero">
@@ -57,7 +60,7 @@
                     </button>
                 </a>
             </div>
-        </div>  
+        </div>
     </div>
     <div id="main">
         <div class="updatefield--container">
@@ -65,11 +68,13 @@
                 <div class="main--container int--label">
                     <div class="name--container">
                         <p class="name--label" id="name--label">
-                            Logged in as: 
+                            Logged in as:
                         </p>
                     </div>
                     <div class="form--group int--label">
-                        <input type="text" class="form--input" id="oppnamefield" placeholder="Opponent's Username" onfocus="showSuggestions()" onblur="hideSuggestions()" required="" onchange="updateOppName()"/>
+                        <input type="text" class="form--input" id="oppnamefield" placeholder="Opponent's Username"
+                            onfocus="showSuggestions()" onblur="hideSuggestions()" required=""
+                            onchange="updateOppName()" />
                         <div class="suggestions--container">
                             <div class="suggestions suggestions--hidden" id="suggestions">
                             </div>
@@ -104,7 +109,7 @@
                             </div>
                         </div>
                         <p class="name--label" id="new--rating" style="transform: scale(0.66); margin-bottom: 50px;">
-                            Your new rating is: 
+                            Your new rating is:
                         </p>
                     </div>
                 </div>
@@ -112,131 +117,132 @@
         </div>
     </div>
     <script>
-var username = "";
-var oppName = ""
-var isWin = true
-var modded = false;
-var userList = {}
-var searchInput = document.getElementById("oppnamefield");
-var suggestionPanel = document.getElementById("suggestions");
+        var username = "";
+        var oppName = ""
+        var isWin = true
+        var modded = false;
+        var userList = {}
+        var searchInput = document.getElementById("oppnamefield");
+        var suggestionPanel = document.getElementById("suggestions");
 
-function homeSetup() {
-    updateTheme("home");
-    username = localStorage.getItem("username");
-    if (username == null){
-        document.getElementById("name--label").innerHTML = "Not signed in";
-        document.getElementById("herobutton--profile").setAttribute("href", "log-in.html");
-        document.getElementById("herobutton--profile").setAttribute("onlick", "window.open('log-in.html', '_self');")
-        document.getElementById("herobutton--profile--text").innerHTML = "Log In / Sign Up";
-    }else{
-        document.getElementById("name--label").innerHTML = "Logged in as: " + username;   
-    }
-}
+        function homeSetup() {
+            updateTheme("home");
+            username = localStorage.getItem("username");
+            if (username == null) {
+                document.getElementById("name--label").innerHTML = "Not signed in";
+                document.getElementById("herobutton--profile").setAttribute("href", "log-in.html");
+                document.getElementById("herobutton--profile").setAttribute("onlick", "window.open('log-in.html', '_self');")
+                document.getElementById("herobutton--profile--text").innerHTML = "Log In / Sign Up";
+            } else {
+                document.getElementById("name--label").innerHTML = "Logged in as: " + username;
+            }
+        }
 
-function setOppName(name) {
-    console.log("Setting", name);
-    oppName = name;
-    searchInput.value = name;
-}
+        function setOppName(name) {
+            console.log("Setting", name);
+            oppName = name;
+            searchInput.value = name;
+        }
 
-function updateOppName() {
-    oppName = document.getElementById("oppnamefield").value;
-}
+        function updateOppName() {
+            oppName = document.getElementById("oppnamefield").value;
+        }
 
-function setModded() {
-    modded = !modded
-}
+        function setModded() {
+            modded = !modded
+        }
 
-function setWin(){
-    isWin = !isWin;
-}
-function submitNewValues(){
-    if (oppName == "") {
-        return;
-    }
-    db.collection("users").where("username", "==", username)
-    .get()
-    .then((querySnapshot) => {
-        querySnapshot.forEach((player) => {
-            // doc.data() is never undefined for query doc snapshots
-            var oppId = "";
-            db.collection("users").where("username", "==", oppName)
-            .get()
-            .then((oppSnapshot) => {
-                oppSnapshot.forEach((opp) => {
-                    var AS = player.data().rating;
-                    var BS = opp.data().rating;
-                    var aD = eval("((" + AS + "+" + BS + ") / 2) / 10");
-                    var aWinChange = eval("(" + AS + "/" + aD + ") * (" + BS + "/" + AS + ")");
-                    var bWinChange = eval("(" + BS + "/" + aD + ") * (" + AS + "/" + BS + ")");
+        function setWin() {
+            isWin = !isWin;
+        }
+        function submitNewValues() {
+            if (oppName == "") {
+                return;
+            }
+            db.collection("users").where("username", "==", username)
+                .get()
+                .then((querySnapshot) => {
+                    querySnapshot.forEach((player) => {
+                        // doc.data() is never undefined for query doc snapshots
+                        var oppId = "";
+                        db.collection("users").where("username", "==", oppName)
+                            .get()
+                            .then((oppSnapshot) => {
+                                oppSnapshot.forEach((opp) => {
+                                    var AS = player.data().rating;
+                                    var BS = opp.data().rating;
+                                    var aD = eval("((" + AS + "+" + BS + ") / 2) / 10");
+                                    var aWinChange = eval("(" + AS + "/" + aD + ") * (" + BS + "/" + AS + ")");
+                                    var bWinChange = eval("(" + BS + "/" + aD + ") * (" + AS + "/" + BS + ")");
 
-                    var changeA = 0;
-                    var changeB = 0;
-                    if (isWin == true) {
-                        changeA = aWinChange;
-                        changeB = eval("-1 * " + aWinChange)
-                    }else{
-                        changeA = eval("-1 * " + bWinChange);
-                        changeB = bWinChange
-                    }
-                    changeA = Math.round(changeA);
-                    changeB = Math.round(changeB);
-                    db.collection("users").doc(player.id).set({
-                        password: player.data().password,
-                        username: player.data().username,
-                        rating: Math.max(Math.round(player.data().rating + changeA), 1)
-                    })
-                    .then(() => {
-                        var d = new Date();
-                        document.getElementById("new--rating").innerHTML = "Your rating is: " + Math.round(player.data().rating + changeA)
-                        localStorage.setItem("rating", Math.round(player.data().rating + changeA));
-                        document.getElementById("scorelabel").innerHTML = "Score: " + currentRating;
-                        db.collection("users").doc(player.id).collection("matchHistory").add({
-                            opponent: opp.data().username,
-                            oppRating: opp.data().rating, //Rating at the time of match before score applied
-                            win: isWin,
-                            ratingChange: changeA,
-                            modded: modded,
-                            date: eval(d.getMonth() + 1) + "/" + d.getDate() + "/" + d.getFullYear(),
-                            timefrom: d.getTime()
-                        }).catch((error) => {
-                            console.error("Error adding new item to user history: ", error);
-                        });
-                    })
-                    .catch((error) => {
-                        console.error("Error writing document: ", error);
+                                    var changeA = 0;
+                                    var changeB = 0;
+                                    if (isWin == true) {
+                                        changeA = aWinChange;
+                                        changeB = eval("-1 * " + aWinChange)
+                                    } else {
+                                        changeA = eval("-1 * " + bWinChange);
+                                        changeB = bWinChange
+                                    }
+                                    changeA = Math.round(changeA);
+                                    changeB = Math.round(changeB);
+                                    db.collection("users").doc(player.id).set({
+                                        password: player.data().password,
+                                        username: player.data().username,
+                                        rating: Math.max(Math.round(player.data().rating + changeA), 1)
+                                    })
+                                        .then(() => {
+                                            var d = new Date();
+                                            document.getElementById("new--rating").innerHTML = "Your rating is: " + Math.round(player.data().rating + changeA)
+                                            localStorage.setItem("rating", Math.round(player.data().rating + changeA));
+                                            document.getElementById("scorelabel").innerHTML = "Score: " + currentRating;
+                                            db.collection("users").doc(player.id).collection("matchHistory").add({
+                                                opponent: opp.data().username,
+                                                oppRating: opp.data().rating, //Rating at the time of match before score applied
+                                                win: isWin,
+                                                ratingChange: changeA,
+                                                modded: modded,
+                                                date: eval(d.getMonth() + 1) + "/" + d.getDate() + "/" + d.getFullYear(),
+                                                timefrom: d.getTime()
+                                            }).catch((error) => {
+                                                console.error("Error adding new item to user history: ", error);
+                                            });
+                                        })
+                                        .catch((error) => {
+                                            console.error("Error writing document: ", error);
+                                        });
+                                    db.collection("users").doc(opp.id).set({
+                                        password: opp.data().password,
+                                        username: opp.data().username,
+                                        rating: Math.max(Math.round(opp.data().rating + changeB), 1)
+                                    })
+                                        .then(() => {
+                                            var d = new Date();
+                                            db.collection("users").doc(opp.id).collection("matchHistory").add({
+                                                opponent: player.data().username,
+                                                oppRating: player.data().rating, //Rating at the time of match before score applied
+                                                win: !isWin,
+                                                ratingChange: changeB,
+                                                modded: modded,
+                                                date: eval(d.getMonth() + 1) + "/" + d.getDate() + "/" + d.getFullYear(),
+                                                timefrom: d.getTime()
+                                            }).catch((error) => {
+                                                console.error("Error adding new item to opponent history: ", error);
+                                            });
+                                        })
+                                        .catch((error) => {
+                                            console.error("Error writing document: ", error);
+                                        });
+                                });
+                            });
                     });
-                    db.collection("users").doc(opp.id).set({
-                        password: opp.data().password,
-                        username: opp.data().username,
-                        rating: Math.max(Math.round(opp.data().rating + changeB), 1)
-                    })
-                    .then(() => {
-                        var d = new Date();
-                        db.collection("users").doc(opp.id).collection("matchHistory").add({
-                            opponent: player.data().username,
-                            oppRating: player.data().rating, //Rating at the time of match before score applied
-                            win: !isWin,
-                            ratingChange: changeB,
-                            modded: modded,
-                            date: eval(d.getMonth() + 1) + "/" + d.getDate() + "/" + d.getFullYear(),
-                            timefrom: d.getTime()
-                        }).catch((error) => {
-                            console.error("Error adding new item to opponent history: ", error);
-                        });
-                    })
-                    .catch((error) => {
-                        console.error("Error writing document: ", error);
-                    });
+                })
+                .catch((error) => {
+                    console.error("Error getting documents: ", error);
                 });
-            });
-        });
-    })
-    .catch((error) => {
-        console.error("Error getting documents: ", error);
-    });
 
-}
+        }
     </script>
 </body>
+
 </html>

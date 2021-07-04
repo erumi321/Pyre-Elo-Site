@@ -1,41 +1,44 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <link rel="stylesheet" href="universal.css">
-        <link rel="stylesheet" href="lightuniversal.css" id="universal--theme">
-        <link rel="stylesheet" href="profile/profile.css">
-        <link rel="stylesheet" href="profile/lightprofile.css" id="page--theme">
-        <title>Page Title</title>
 
-            <!--Firebase Integration-->
-        <script src="https://www.gstatic.com/firebasejs/8.6.2/firebase-app.js"></script>
-        <script src="https://www.gstatic.com/firebasejs/8.6.2/firebase-firestore.js"></script>
-        <script src="https://www.gstatic.com/firebasejs/8.6.2/firebase-auth.js"></script>
-        <script src="https://www.gstatic.com/firebasejs/8.6.2/firebase-database.js"></script>
-        <script src="https://www.gstatic.com/firebasejs/8.6.2/firebase-messaging.js"></script>
-        <script src="https://www.gstatic.com/firebasejs/8.6.2/firebase-functions.js"></script>
-        <script src="https://www.gstatic.com/firebasejs/8.6.2/firebase-storage.js"></script>
-        <script src="universal.js"></script>
-    </head>
-    <body class="hidden" onload="universalSetup(); buildMatchHistory(); updateTheme('profile');"> 
-        <div class="topnav">
-            <div class="left">
-                <a href="index.html" onclick="window.open('index.html', '_self');">Home</a>
-                <a id="topnav--stagingv" href="staging.html" onclick="window.open('staging.html', '_self');">Staging</a>
-            </div>
-            <div class="right">
-                <p class="int--label" id="scorelabel">
-                    Score: 
-                </p>
-                <a href="profile.html" id="topnav--loginbtn" class="active int--label" onclick="window.open('profile.html', '_self');">Profile</a>
+<head>
+    <link rel="stylesheet" href="universal.css">
+    <link rel="stylesheet" href="lightuniversal.css" id="universal--theme">
+    <link rel="stylesheet" href="profile/profile.css">
+    <link rel="stylesheet" href="profile/lightprofile.css" id="page--theme">
+    <title>Page Title</title>
+
+    <!--Firebase Integration-->
+    <script src="https://www.gstatic.com/firebasejs/8.6.2/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.2/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.2/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.2/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.2/firebase-messaging.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.2/firebase-functions.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.2/firebase-storage.js"></script>
+    <script src="universal.js"></script>
+</head>
+
+<body class="hidden" onload="universalSetup(); buildMatchHistory(); updateTheme('profile');">
+    <div class="topnav">
+        <div class="left">
+            <a href="index.html" onclick="window.open('index.html', '_self');">Home</a>
+            <a id="topnav--stagingv" href="staging.html" onclick="window.open('staging.html', '_self');">Staging</a>
         </div>
+        <div class="right">
+            <p class="int--label" id="scorelabel">
+                Score:
+            </p>
+            <a href="profile.html" id="topnav--loginbtn" class="active int--label"
+                onclick="window.open('profile.html', '_self');">Profile</a>
         </div>
+    </div>
     <div class="flex--between">
         <ul class="matchhistorylist" id="matchhistorylist">
             <div class="int--col">
                 <h1 id="historylist--title">
                     Match History
-                </h1>                
+                </h1>
             </div>
         </ul>
         <div class="int--col actionbuttons--container">
@@ -58,73 +61,74 @@
         </div>
     </div>
 
-    </body>
-    <script>
-function buildMatchHistory() {
+</body>
+<script>
+    function buildMatchHistory() {
 
-    db.collection("users").where("username", "==", localStorage.getItem('username'))
-    .get()
-    .then((querySnapshot) => {
-        querySnapshot.forEach((user) => {
-            db.collection("users").doc(user.id).collection("matchHistory")
-            .orderBy("timefrom", "desc")
-            .get()
-            .then((historySnapshot) => {
-                historySnapshot.forEach((match) => {
-                    var change = (eval(match.data().ratingChange) > 0) ? "+"+match.data().ratingChange: match.data().ratingChange;
-                    var historycardholder = document.getElementById("basehistorycard").cloneNode(true);
-                    historycardholder.classList.remove("hidden");
-                    var card = historycardholder.children[0];
-                    card.children[0].children[0].setAttribute("src", (!match.data().modded)? "profile/icons/unmoddedIcon512512.png" : "profile/icons/moddedIcon512512.png")
-                    card.children[1].children[0].innerHTML = user.data().username;
-                    card.children[1].children[1].innerHTML = match.data().opponent;
-                    if (match.data().win){
-                        card.children[2].children[0].innerHTML = "Win(" + match.data().ratingChange + ")";
-                        card.children[2].children[1].innerHTML = "Lose(" + eval(-1 * match.data().ratingChange) + ")";
-                    }else{
-                        card.children[2].children[0].innerHTML = "Lose(" + match.data().ratingChange + ")";
-                        card.children[2].children[1].innerHTML = "Win(" + eval(-1 * match.data().ratingChange) + ")";
-                    }
-                    card.children[3].innerHTML = match.data().date;
-                    document.getElementById("matchhistorylist").children[0].appendChild(historycardholder);
-                })
-            })
-        });
-    })
-    .catch((error) => {
-        console.error("Error getting documents: ", error);
-    });
-}
-
-function deleteAccount() {
-    if (prompt("Type your username here to permanetly delete this Account (" + localStorage.getItem("username") + ")") == localStorage.getItem("username")){
         db.collection("users").where("username", "==", localStorage.getItem('username'))
-        .get()
-        .then((querySnapshot) => {
-            querySnapshot.forEach((user) => {
-                db.collection("users").doc(user.id).delete().then(() => {
-                    logout();
-                }).catch((error) => {
-                    console.error("Error removing document: ", error);
+            .get()
+            .then((querySnapshot) => {
+                querySnapshot.forEach((user) => {
+                    db.collection("users").doc(user.id).collection("matchHistory")
+                        .orderBy("timefrom", "desc")
+                        .get()
+                        .then((historySnapshot) => {
+                            historySnapshot.forEach((match) => {
+                                var change = (eval(match.data().ratingChange) > 0) ? "+" + match.data().ratingChange : match.data().ratingChange;
+                                var historycardholder = document.getElementById("basehistorycard").cloneNode(true);
+                                historycardholder.classList.remove("hidden");
+                                var card = historycardholder.children[0];
+                                card.children[0].children[0].setAttribute("src", (!match.data().modded) ? "profile/icons/unmoddedIcon512512.png" : "profile/icons/moddedIcon512512.png")
+                                card.children[1].children[0].innerHTML = user.data().username;
+                                card.children[1].children[1].innerHTML = match.data().opponent;
+                                if (match.data().win) {
+                                    card.children[2].children[0].innerHTML = "Win(" + match.data().ratingChange + ")";
+                                    card.children[2].children[1].innerHTML = "Lose(" + eval(-1 * match.data().ratingChange) + ")";
+                                } else {
+                                    card.children[2].children[0].innerHTML = "Lose(" + match.data().ratingChange + ")";
+                                    card.children[2].children[1].innerHTML = "Win(" + eval(-1 * match.data().ratingChange) + ")";
+                                }
+                                card.children[3].innerHTML = match.data().date;
+                                document.getElementById("matchhistorylist").children[0].appendChild(historycardholder);
+                            })
+                        })
                 });
+            })
+            .catch((error) => {
+                console.error("Error getting documents: ", error);
             });
-        })
-        .catch((error) => {
-            console.error("Error getting documents: ", error);
-        });
     }
-}
 
-function toggleDarkMode() {
-    if (localStorage.getItem("theme") == "light") {
-        localStorage.setItem("theme", "dark");
-    }else{
-        localStorage.setItem("theme", "light");
+    function deleteAccount() {
+        if (prompt("Type your username here to permanetly delete this Account (" + localStorage.getItem("username") + ")") == localStorage.getItem("username")) {
+            db.collection("users").where("username", "==", localStorage.getItem('username'))
+                .get()
+                .then((querySnapshot) => {
+                    querySnapshot.forEach((user) => {
+                        db.collection("users").doc(user.id).delete().then(() => {
+                            logout();
+                        }).catch((error) => {
+                            console.error("Error removing document: ", error);
+                        });
+                    });
+                })
+                .catch((error) => {
+                    console.error("Error getting documents: ", error);
+                });
+        }
     }
-    updateTheme("profile");
-}
 
-    </script>
+    function toggleDarkMode() {
+        if (localStorage.getItem("theme") == "light") {
+            localStorage.setItem("theme", "dark");
+        } else {
+            localStorage.setItem("theme", "light");
+        }
+        updateTheme("profile");
+    }
+
+</script>
+
 </html>
 
 <div class="historycard--holder hidden" id="basehistorycard">
@@ -143,5 +147,5 @@ function toggleDarkMode() {
         <p class="main--date">
             01/01/1990
         </p>
-    </div> 
+    </div>
 </div>

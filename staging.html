@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="universal.css">
+        <link rel="stylesheet" href="lightuniversal.css" id="universal--theme">
+        <link rel="stylesheet" href="staging/staging.css">
+        <link rel="stylesheet" href="staging/lightstaging.css" id="page--theme">
+        <title>Page Title</title>
+
+            <!--Firebase Integration-->
+        <script src="https://www.gstatic.com/firebasejs/8.6.2/firebase-app.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/8.6.2/firebase-firestore.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/8.6.2/firebase-auth.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/8.6.2/firebase-database.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/8.6.2/firebase-messaging.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/8.6.2/firebase-functions.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/8.6.2/firebase-storage.js"></script>
+        <script src="universal.js"></script>
+        <script src="character-data.js"></script>
+
+    </head>
+    <body class="hidden" onload="universalSetup(); updateTheme('staging');"> 
+        <div class="topnav">
+            <div class="left">
+                <a href="index.html" onclick="window.open('index.html', '_self');">Home</a>
+                <a id="topnav--staging" href="staging.html" class="active" onclick="window.open('staging.html', '_self');">Staging</a>
+                <section id="pyre" class="int--label" style="padding-left: 30px; transform: translateY(33%);">
+                <div class="section__label int--label" style="padding-right: 10px;">Connection: </h3>
+                <div id="pyre__connection" class="section_bar noselect int--label" onclick="connectionClick()">
+                  <div id="pyre__dot" class="connection__dot connection__dot--disconnected int--label" style="transform: translateY(25%);"></div>
+                  <div id="pyre__status" class="connection__status int--label"> Disconnected</div>
+                </div>
+              </section>
+            </div>
+            <div class="right">
+                <p class="int--label" id="scorelabel">
+                    Score: 
+                </p>
+                <a href="profile.html" id="topnav--loginbtn" onclick="window.open('profile.html', '_self');">Profile</a>
+            </div>
+        </div>
+        <div class="center">
+            <button class="confirmbutton" style="margin-top: 75px; margin-bottom: -50px;" onclick="{location.href='WebSocketMod.zip'}">
+                <span id="herobutton--profile--text" style="font-size: 0.75rem;">Download Mod</span>
+            </button>
+            <button class="confirmbutton" style="margin-top: 75px; margin-bottom: -50px;" onclick='{window.open("https://docs.google.com/document/d/1QeU_R_EGWpuJlBf3u_-fwIbCIGf_Qu8Bg5LiR_IzWQQ/edit?usp=sharing", "_blank");}'>
+                <span id="herobutton--profile--text" style="font-size: 1rem">Instructions</span>
+            </button>
+        </div>
+        <ul class="matchhistorylist" id="matchhistorylist">
+            <div class="int--col">
+                <div class="center">
+                    <div class="form--group int--label">
+                        <input type="text" class="form--input" id="oppnamefield" placeholder="Opponent's Username" onfocus="showSuggestions()" onblur="hideSuggestions()" required="" onchange="setOppName()"/>
+                        <div class="suggestions--container">
+                            <div class="suggestions suggestions--hidden" id="suggestions">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <h1 id="historylist--title">
+                    Staging History
+                </h1>
+            </div>
+        </ul>
+        <div class="center">
+            <button class="confirmbutton confirmbutton--green" style="margin-top: 20px;" onclick="submitAllMatches()">
+                <span id="herobutton--profile--text">Submit All</span>
+            </button>
+        </div>
+    </body>
+    <script src="PyreLive.js"></script>
+    <script>
+        var username = localStorage.getItem("username");
+        var oppName = "";
+        function recordMatch(message) {
+            var data = message.message;
+            console.log("Recording", data);
+            var historycardholder = document.getElementById("basehistorycard").cloneNode(true);
+            historycardholder.classList.remove("hidden");
+            var card = historycardholder.children[0].children[0].children[0]; //gets int--col above main
+            var main = card.children[0]; //gets main
+            var icons = card.children[1]; //gets the icon container
+            main.children[0].children[0].setAttribute("src", (data.modded)? "profile/icons/unmoddedIcon512512.png" : "profile/icons/moddedIcon512512.png")
+            main.children[1].children[0].innerHTML = localStorage.getItem("username");
+            var matchOppName = (oppName == "" || oppName == null)? "Unset": oppName;
+            main.children[1].children[1].innerHTML = matchOppName
+            if (data.Winner == "A"){
+                main.children[2].children[0].innerHTML = "Win";
+                main.children[2].children[1].innerHTML = "Lose";
+            }else{
+                main.children[2].children[0].innerHTML = "Lose";
+                main.children[2].children[1].innerHTML = "Win";
+            }
+            console.log(data.TeamACharacters);
+            for (var i = 0; i < 3; i++){
+                
+                icons.children[i].setAttribute("src", "staging/icons/Portraits/" + data.TeamACharacters[i].Portrait + ".png"); 
+            }
+            for (var i = 0; i < 3; i++){
+                icons.children[i + 4].setAttribute("src", "staging/icons/Portraits/" + data.TeamBCharacters[i].Portrait + ".png");
+            }
+            var holder = document.getElementById("matchhistorylist");
+            var inputForm = historycardholder.children[1].children[0];
+            var index = holder.children[0].childElementCount - 2;
+            inputForm.setAttribute("onchange", "clearIndexedSearch(" + index + ");");
+            inputForm.setAttribute("onfocus", "showIndexedSuggestions(" +index+");");
+            inputForm.setAttribute("onblur", "hideIndexedSuggestions(" +index+");");
+
+            var suggestions = historycardholder.children[1].children[1].children[0];
+            suggestions.setAttribute("id", "suggestions--historycard--" + index);
+            holder.children[0].appendChild(historycardholder);
+            updateIndexedSearch(index, userList);
+            inputForm.addEventListener("keyup", function() {
+                updateIndexedSearch(index, userList);
+            })
+        }   
+
+        Pyre.on('record-match', recordMatch);
+
+        var searchInput = document.getElementById("oppnamefield");
+        var suggestionPanel = document.getElementById("suggestions");
+
+        function updateName(index, override) {
+            var historycardholder = document.getElementById("matchhistorylist").children[0].children[index + 2];
+            var card = historycardholder.children[0].children[0].children[0];
+            var main = card.children[0];
+            if (!override) {
+                main.children[1].children[1].innerHTML = historycardholder.children[1].children[0].value;
+            }else{
+                main.children[1].children[1].innerHTML = oppName;
+                historycardholder.children[1].children[0].value = oppName; 
+            }
+            updateIndexedSearch(index, userList);
+        }
+
+        function setIndexedName(index, name) {
+            console.log("Setting", name);
+            oppName = name;
+            var historycardholder = document.getElementById("matchhistorylist").children[0].children[index + 2];
+            var searchInput = historycardholder.children[1].children[0];
+            searchInput.value = name;
+            updateName(index, true);
+        }
+
+        function setOppName(name) {
+            console.log("Setting", name);
+            oppName = name;
+            searchInput.value = name;
+            for (var i = 2; i < document.getElementById("matchhistorylist").children[0].childElementCount; i++){
+                updateName(i - 2, true);
+            }
+        }
+
+        function showIndexedSuggestions(index){
+            var suggestionPanel = document.getElementById("suggestions--historycard--" + index);
+            suggestionPanel.classList.remove("suggestions--hidden");
+        }
+        function hideIndexedSuggestions(index){
+            var suggestionPanel = document.getElementById("suggestions--historycard--" + index);
+            setTimeout(() => {suggestionPanel.classList.add("suggestions--hidden"); }, 100);
+        }
+
+        function updateIndexedSearch(index, userList) {
+            var suggestionPanel = document.getElementById("suggestions--historycard--" + index);
+            var historycardholder = document.getElementById("matchhistorylist").children[0].children[index + 2];
+            var searchInput = historycardholder.children[1].children[0];
+            var input = searchInput.value;
+            suggestionPanel.innerHTML = "";
+            if (input != null) {
+                var suggestions = userList.filter(function(user){
+                    return user.data().username.toLowerCase().startsWith(input.toLowerCase());
+                });
+                if (input == "") {
+                    suggestions = userList;
+                }
+                if (suggestions.length == 0) {
+                    hideSuggestions();
+                    return;
+                }
+                if (suggestions.length > 0){
+                    if (suggestions.length > 6){
+                        suggestions = suggestions.slice(0,6); 
+                    }
+                }
+                
+                suggestions.forEach((user) => {
+                    var div = document.createElement("div");
+                    div.innerHTML = user.data().username;
+                    div.setAttribute("onclick", "setIndexedName(" + index + ",'" + user.data().username + "');")
+                    suggestionPanel.appendChild(div);
+                })
+            }else{
+                hideSuggestions();
+            }
+        }
+
+        function clearIndexedSearch(index) {
+            var suggestionPanel = document.getElementById("suggestions--historycard--" + index);
+            suggestionPanel.classList.add("suggestions--hidden");
+            var input = suggestionPanel.parentNode.parentNode.children[0];
+            input.value = "";
+            updateIndexedSearch(index, userList);
+        }
+        
+        function submitAllMatches() {
+            var matchHolder = document.getElementById("matchhistorylist").children[0];
+            if (matchHolder.childElementCount <= 2) {
+                alert("No matches");
+                return;
+            }
+            var opponentNames = {};
+            for(var i = 2; i < matchHolder.childElementCount; i++) {
+                var match = matchHolder.children[i];
+                var card = match.children[0].children[0].children[0];
+                var main = card.children[0];
+                var oppName = main.children[1].children[1].innerHTML;
+                var winValue = main.children[2].children[0].innerHTML;
+                if (opponentNames[oppName] == null) {
+                    if (oppName == "Unset") {
+                        alert("Unset Opponent Name");
+                        return;
+                    }
+                    opponentNames[oppName] = {"matches": 1, "isWin": [(winValue == "Win")]};
+                }else{
+                    opponentNames[oppName]["matches"] ++;
+                    opponentNames[oppName]["isWin"].push((winValue == "Win"));
+                }
+                
+            }
+            console.log(opponentNames);
+            Object.keys(opponentNames).forEach(oppName => {
+
+                db.collection("users").where("username", "==", username)
+                .get()
+                .then((querySnapshot) => {
+                    querySnapshot.forEach((player) => {
+                        // doc.data() is never undefined for query doc snapshots
+                        var oppId = "";
+                        db.collection("users").where("username", "==", oppName)
+                        .get()
+                        .then((oppSnapshot) => {
+                             oppSnapshot.forEach((opp) => {
+                                var matchLogA = []
+                                var matchLogB = [];
+                                var tempAS = player.data().rating;
+                                var tempBS = opp.data().rating;
+                                
+                                for (var x = 0; x < opponentNames[oppName]["matches"]; x++) {
+                                    var isWin = opponentNames[oppName]["isWin"][x];
+                                    var aD = eval("((" + tempAS + "+" + tempBS + ") / 2) / 10");
+                                    var aWinChange = eval("(" + tempAS + "/" + aD + ") * (" + tempBS + "/" + tempAS + ")");
+                                    var bWinChange = eval("(" + tempBS + "/" + aD + ") * (" + tempAS + "/" + tempBS + ")");
+                                    var changeA = 0;
+                                    var changeB = 0;
+                                    if (isWin == true) {
+                                        changeA = aWinChange;
+                                        changeB = eval("-1 * " + aWinChange)
+                                    }else{
+                                        changeA = eval("-1 * " + bWinChange);
+                                        changeB = bWinChange
+                                    }
+                                    changeA = Math.round(changeA);
+
+                                    matchLogA.push({
+                                        "oppRating": tempBS,
+                                        "win": isWin,
+                                        "ratingChange": changeA,
+                                        "modded": false,
+                                    });
+
+                                    changeB = Math.round(changeB);
+
+                                    matchLogB.push({
+                                        "oppRating": tempAS,
+                                        "win": !isWin,
+                                        "ratingChange": changeB,
+                                        "modded": false,
+                                    });
+
+                                    tempAS = Math.max(Math.round(tempAS + changeA), 1);
+                                    tempBS = Math.max(Math.round(tempBS + changeB), 1)
+                                }
+                                db.collection("users").doc(player.id).set({
+                                    password: player.data().password,
+                                    username: player.data().username,
+                                    rating: tempAS
+                                })
+                                .then(() => {
+                                    var d = new Date();
+                                    localStorage.setItem("rating", tempAS);
+                                    document.getElementById("scorelabel").innerHTML = "Score: " + currentRating;
+                                    for (var i = 0; i < matchLogA.length; i++){
+                                        db.collection("users").doc(player.id).collection("matchHistory").add({
+                                            opponent: opp.data().username,
+                                            oppRating: matchLogA[i]["oppRating"],
+                                            win: matchLogA[i]["win"],
+                                            ratingChange: matchLogA[i]["ratingChange"],
+                                            modded: matchLogA[i]["modded"],
+                                            date: eval(d.getMonth() + 1) + "/" + d.getDate() + "/" + d.getFullYear(),
+                                            timefrom: d.getTime()
+                                        }).catch((error) => {
+                                            console.error("Error adding new item to user history: ", error);
+                                        });
+                                    }
+                                })
+                                .catch((error) => {
+                                    console.error("Error writing document: ", error);
+                                });
+                                db.collection("users").doc(opp.id).set({
+                                    password: opp.data().password,
+                                    username: opp.data().username,
+                                    rating: tempBS
+                                })
+                                .then(() => {
+                                    var d = new Date();
+                                    console.log("matchLogA: ", matchLogA);
+                                    for (var i = 0; i < matchLogB.length; i++){
+                                        db.collection("users").doc(opp.id).collection("matchHistory").add({
+                                            opponent: player.data().username,
+                                            oppRating: matchLogB[i]["oppRating"],
+                                            win: matchLogB[i]["win"],
+                                            ratingChange: matchLogB[i]["ratingChange"],
+                                            modded: matchLogB[i]["modded"],
+                                            date: eval(d.getMonth() + 1) + "/" + d.getDate() + "/" + d.getFullYear(),
+                                            timefrom: d.getTime()
+                                        }).catch((error) => {
+                                            console.error("Error adding new item to opponent history: ", error);
+                                        });
+                                    }
+                                })
+                                .catch((error) => {
+                                    console.error("Error writing document: ", error);
+                                });
+                             });
+                        });
+                    });
+                })
+                .catch((error) => {
+                    console.error("Error getting documents: ", error);
+                });
+            });
+        }
+    </script>
+</html>
+
+<div class="historycard--holder hidden" id="basehistorycard">
+    <div class="historycard">
+        <div class="center">
+            <div class="int--col">
+                <div class="main">
+                    <div class="historycard--sidebar int--label">
+                        <img src="profile/icons/moddedIcon512512.png" alt="" class="historycard--image">
+                    </div>
+                    <div class="main--playercol int--label">
+                        <h2 class="profile--name">Team A</h2>
+                        <h2 class="profile--name">Team B</h2>
+                    </div>
+                    <div class="main--result int--label">
+                        <p class="main--scoretext">Win</p>
+                        <p class="main--scoretext">Lose</p>
+                    </div>
+                </div>
+                <div class="icons">
+                    <img src="staging/icons/Portraits/CroneBertrude01.png" class="historycard--icon" alt="">
+                    <img src="staging/icons/Portraits/CroneBertrude01.png" class="historycard--icon" alt="">
+                    <img src="staging/icons/Portraits/CroneBertrude01.png" class="historycard--icon" alt="">
+                    <p>vs</p>
+                    <img src="staging/icons/Portraits/CroneBertrude01.png" class="historycard--icon" alt="">
+                    <img src="staging/icons/Portraits/CroneBertrude01.png" class="historycard--icon" alt="">
+                    <img src="staging/icons/Portraits/CroneBertrude01.png" class="historycard--icon" alt="">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="form--group int--label">
+        <input type="text" class="form--input" placeholder="Opponent's Username" onfocus="showIndexedSuggestions(index)" onblur="hideIndexedSuggestions(index)" required="" onchange="clearIndexedSearch(index)"/>
+        <div class="suggestions--container">
+            <div class="suggestions suggestions--hidden" id="suggestions--historycard--index">
+            </div>
+        </div>
+    </div>
+</div>

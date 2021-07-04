@@ -6,6 +6,7 @@ html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockq
     font-size: 100%;
     vertical-align: baseline;
     background: transparent;
+    z-index: 0;
 }
 
 body.hidden * {
@@ -27,6 +28,27 @@ body.hidden * {
 .topnav .right {
     float: right;
 }
+
+.connection__dot {
+    width: 1.4em;
+    height: 1.4em;
+    border-radius: 50%;
+    transition: background-color 0.14s;
+    filter: saturate(70%)
+  }
+  .connection__dot--scanning { background-color: yellow; }
+  .connection__dot--connected { background-color: rgb(49, 179, 49); }
+  .connection__dot--disconnecting { background-color: rgb(255, 115, 0); }
+  .connection__dot--disconnected { background-color: red; }
+  .connection__status {
+    font-size: 95%;
+    margin-left: 0.5em;
+    font-weight: normal;
+  }
+  .connection__status:hover {
+    transform-origin: center left;
+    transform: scale(1.1);
+  }
 
 .topnav a {
     float: left;
@@ -166,6 +188,46 @@ input[type="checkbox"]
 
 .confirmbutton--green:hover{
     transition: 0.3s ease-in-out;
+}
+
+.suggestions--container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 120%;
+    margin: 10px 0;
+}
+
+.suggestions {
+    border-radius: 20px;
+    width: 70%;
+    opacity: 100%;
+    transition: opacity 0.33s ease;
+}
+
+.suggestions div {
+    padding: 0px 5px 5px 5px;
+    font-size: 1rem;
+    cursor: pointer;
+    text-align: center;
+}
+
+.suggestions div:first-child {
+    border-radius: 17px 17px 0 0;
+}
+
+.suggestions div:last-child {
+    border-radius: 0 0 17px 17px;
+}
+
+.suggestions div:only-child {
+    border-radius: 17px 17px 17px 17px;
+}
+
+.suggestions.suggestions--hidden {
+    border: 0px;
+    opacity: 0%;
+    display: none;
 }
 
 .hidden {

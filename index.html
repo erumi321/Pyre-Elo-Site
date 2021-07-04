@@ -23,6 +23,7 @@
     <div class="topnav">
         <div class="left">
             <a class="active" href="index.html" onclick="window.open('index.html', '_self');">Home</a>
+            <a id="topnav--staging" href="staging.html" onclick="window.open('staging.html', '_self');">Staging</a>
         </div>
         <div class="right">
             <p class="int--label" id="scorelabel">
@@ -39,7 +40,7 @@
                         erumi321's Pyre Elo Tracker
                     </h1>
                     <h3 class="title--descriptor">
-                        A website for tracking Scribe scores between players allowing for more competition if desired
+                        A website for tracking Scribe scores between players allowing for more competition in Pyre
                     </h3>
                 </div>
 
@@ -130,61 +131,10 @@ function homeSetup() {
     }else{
         document.getElementById("name--label").innerHTML = "Logged in as: " + username;   
     }
-    db.collection("users").where("username", "!=", username)
-    .get()
-    .then((querySnapshot) => {
-        userList = querySnapshot.docs;
-        updateSearch();
-    });
-    
-}
-
-searchInput.addEventListener("keyup", function() {
-    showSuggestions();
-    updateSearch();
-})
-
-function showSuggestions() {
-    suggestionPanel.classList.remove("suggestions--hidden");
-}
-
-function hideSuggestions() {
-    setTimeout(() => {suggestionPanel.classList.add("suggestions--hidden"); }, 50);
-    
-}
-
-function updateSearch() {
-    var input = searchInput.value;
-    suggestionPanel.innerHTML = "";
-    if (input != null) {
-        var suggestions = userList.filter(function(user){
-            return user.data().username.toLowerCase().startsWith(input.toLowerCase());
-        });
-        if (input == "") {
-            suggestions = userList;
-        }
-        if (suggestions.length == 0) {
-            hideSuggestions();
-            return;
-        }
-        if (suggestions.length > 0){
-            if (suggestions.length > 6){
-                suggestions = suggestions.slice(0,6); 
-            }
-        }
-        
-        suggestions.forEach((user) => {
-            var div = document.createElement("div");
-            div.innerHTML = user.data().username;
-            div.setAttribute("onclick", "setOppName('" + user.data().username + "');")
-            suggestionPanel.appendChild(div);
-        })
-    }else{
-        hideSuggestions();
-    }
 }
 
 function setOppName(name) {
+    console.log("Setting", name);
     oppName = name;
     searchInput.value = name;
 }

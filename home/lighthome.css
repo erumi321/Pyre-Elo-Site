@@ -8,16 +8,3 @@
      box-shadow: -6px -6px 10px rgba(204, 83, 51, 0.2), 6px 6px 10px rgba(35, 7, 77, 0.2);
 	 color: #6f6cde;
 }
-
-/* Input */
-#suggestions {
-    border: 2px solid #8C82FC;
-}
-
-.suggestions div {
-    border-bottom: 1px solid #c5bfff;
-}
-
-.suggestions div:hover {
-    background: #ddd;
-}

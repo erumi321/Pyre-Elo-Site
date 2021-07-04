@@ -3,8 +3,9 @@ body {
 }
 
 .historycard {
-    background-color: #fff;
-    border: solid #201f73;
+    background-color: #1d1d1d;
+    border: solid #999;
+    color: #aaa;
 }
 
 .confirmbutton--red {
@@ -13,7 +14,6 @@ body {
 }
 
 .confirmbutton--red:hover{
-    background: red;
+    background: #404040;
     color: #fff;
-    transition: 0.3s ease-in-out;
 }

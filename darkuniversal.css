@@ -8,6 +8,16 @@ body {
     background-color: #202020;
 }
 
+.connection__dot {
+    box-shadow: 0 0 0.25em 0.1em #111 inset, -0.1em 0.1em 0.1em 0.05em #111;
+}
+.section__label {
+    color: #fff;
+}
+.connection__status {
+    color: #fff
+}
+
 /* Style the links inside the navigation bar */
 .topnav a {
     color: #f2f2f2;
@@ -76,4 +86,16 @@ body {
 .confirmbutton--green:hover{
     background: #404040;
     color: #fff;
+}
+
+.suggestions {
+    border: 2px solid #606060;
+}
+
+.suggestions div {
+    border-bottom: 1px solid #606060;
+}
+
+.suggestions div:hover {
+    background: #404040 ;
 }

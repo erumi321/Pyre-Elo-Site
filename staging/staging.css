@@ -1,0 +1,108 @@
+.logoutBtn {
+    margin-top: 66px;
+}
+
+.historylist--container {
+    display: inline-block;
+}
+
+#historylist--title {
+    text-align: center;
+}
+
+.matchhistorylist {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 66px;
+}
+
+.connections--container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.connections--title {
+    display: block;
+    margin-bottom: 20px;
+}
+
+.matchhistorylist {
+    margin-top: 66px;
+}
+
+.historycard--holder {
+    display: flex;
+    justify-content: space-between;
+}
+
+.historycard {
+    margin: 1px 10px 0px 10px;
+    width: 55%;
+    height:min-content;
+    display: flex;
+    flex-direction: row;
+    border-width: 2px 2px;
+    border-radius: 5px;
+    text-align: center;
+    box-sizing: border-box;
+    padding: 0px 0px 0px 0px;
+}
+
+.historycard--sidebar {
+    margin: auto 0;
+    padding: 0 20px;
+}
+
+.historycard--image {
+    width: 32px;
+    height: 32px;
+    max-width: 32px;
+    max-height: 32px;
+}
+
+.main--playercol {
+    padding: 0 20px;
+}
+
+.main--result {
+    padding: 0 20px 0 0;
+}
+
+.main--date {
+    margin: auto 0;
+}
+
+.icons {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-left: 10%;
+}
+
+.historycard--icon {
+    max-width: 30px;
+    max-height: 30px;
+}
+
+.deletebutton {
+    display: block;
+    margin-top: 10px;
+    font-size: 0.6rem;
+    white-space: nowrap;
+}
+
+.center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.form--input {
+    display: inline-block;
+}
+
+.hidden {
+    display: none;
+}

@@ -45,7 +45,10 @@ var firebaseConfig = {
 		document.getElementById("topnav--loginbtn").innerHTML = "Log-In / Register";
 		document.getElementById("scorelabel").innerHTML = "";
 		document.getElementById("topnav--loginbtn").setAttribute("href", "log-in.html");
-		document.getElementById("topnav--loginbtn").setAttribute("onlick", "window.open('log-in.html', '_self');")
+		document.getElementById("topnav--loginbtn").setAttribute("onlick", "window.open('log-in.html', '_self');");
+		if (document.getElementById("topnav--staging") != null) {
+			document.getElementById("topnav--staging").remove();
+		}
 	  }
   }
 
@@ -70,10 +73,76 @@ function logout() {
     window.open('index.html', '_self');
 }
 
+var searchInput = document.getElementById("oppnamefield");
+var suggestionPanel = document.getElementById("suggestions");
+
 function updateTheme(pageName)  {
 	document.getElementById("universal--theme").setAttribute("href", localStorage.getItem("theme")+"universal.css");
 	document.getElementById("page--theme").setAttribute("href", pageName + "/"+localStorage.getItem("theme") + pageName + ".css");
 	setTimeout(() => {document.body.classList.remove("hidden"); }, 200);
+	searchInput = document.getElementById("oppnamefield");
+	suggestionPanel = document.getElementById("suggestions");
+
+	if (searchInput != null){
+		db.collection("users").where("username", "!=", localStorage.getItem("username"))
+		.get()
+		.then((querySnapshot) => {
+			userList = querySnapshot.docs;
+			updateSearch();
+		});
+		searchInput.addEventListener("keyup", function() {
+			showSuggestions();
+			updateSearch();
+		})
+	}
+}
+
+var userList = {}
+
+// if (searchInput != null){
+// 	searchInput.addEventListener("keyup", function() {
+// 		showSuggestions();
+// 		updateSearch();
+// 	})
+// }
+function showSuggestions() {
+    suggestionPanel.classList.remove("suggestions--hidden");
+}
+
+function hideSuggestions() {
+    setTimeout(() => {suggestionPanel.classList.add("suggestions--hidden"); }, 100);
+    
+}
+
+function updateSearch() {
+    var input = searchInput.value;
+    suggestionPanel.innerHTML = "";
+    if (input != null) {
+        var suggestions = userList.filter(function(user){
+            return user.data().username.toLowerCase().startsWith(input.toLowerCase());
+        });
+        if (input == "") {
+            suggestions = userList;
+        }
+        if (suggestions.length == 0) {
+            hideSuggestions();
+            return;
+        }
+        if (suggestions.length > 0){
+            if (suggestions.length > 6){
+                suggestions = suggestions.slice(0,6); 
+            }
+        }
+        
+        suggestions.forEach((user) => {
+            var div = document.createElement("div");
+            div.innerHTML = user.data().username;
+            div.setAttribute("onclick", "setOppName('" + user.data().username + "');")
+            suggestionPanel.appendChild(div);
+        })
+    }else{
+        hideSuggestions();
+    }
 }
 
 var sha256 = function sha256(ascii) {

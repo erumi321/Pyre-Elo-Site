@@ -324,6 +324,13 @@
                                             modded: matchLogB[i]["modded"],
                                             date: eval(d.getMonth() + 1) + "/" + d.getDate() + "/" + d.getFullYear(),
                                             timefrom: d.getTime()
+                                        }).then(()=> {
+                                            if (i == matchLogB.length - 1) {
+                                                for(var i = 2; i < matchHolder.childElementCount; i++){
+                                                    matchHolder.removeChild(matchHolder.children[i]);
+                                                }
+                                                alert("Succesfully updated all values");
+                                            }
                                         }).catch((error) => {
                                             console.error("Error adding new item to opponent history: ", error);
                                         });

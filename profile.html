@@ -64,41 +64,61 @@
 </body>
 <script>
     function buildMatchHistory() {
+        getApplicableMatchHisotry().then(historySnapshot => {
+            historySnapshot.forEach((match) => {
 
-        db.collection("users").where("username", "==", localStorage.getItem('username'))
-            .get()
-            .then((querySnapshot) => {
-                querySnapshot.forEach((user) => {
-                    db.collection("users").doc(user.id).collection("matchHistory")
-                        .orderBy("timefrom", "desc")
-                        .get()
-                        .then((historySnapshot) => {
-                            historySnapshot.forEach((match) => {
-                                var change = (eval(match.data().ratingChange) > 0) ? "+" + match.data().ratingChange : match.data().ratingChange;
-                                var historycardholder = document.getElementById("basehistorycard").cloneNode(true);
-                                historycardholder.classList.remove("hidden");
-                                var card = historycardholder.children[0];
-                                card.children[0].children[0].setAttribute("src", (!match.data().modded) ? "profile/icons/unmoddedIcon512512.png" : "profile/icons/moddedIcon512512.png")
-                                card.children[1].children[0].innerHTML = user.data().username;
-                                card.children[1].children[1].innerHTML = match.data().opponent;
-                                if (match.data().win) {
-                                    card.children[2].children[0].innerHTML = "Win(" + match.data().ratingChange + ")";
-                                    card.children[2].children[1].innerHTML = "Lose(" + eval(-1 * match.data().ratingChange) + ")";
-                                } else {
-                                    card.children[2].children[0].innerHTML = "Lose(" + match.data().ratingChange + ")";
-                                    card.children[2].children[1].innerHTML = "Win(" + eval(-1 * match.data().ratingChange) + ")";
-                                }
-                                card.children[3].innerHTML = match.data().date;
-                                document.getElementById("matchhistorylist").children[0].appendChild(historycardholder);
-                            })
-                        })
-                });
+                var ratingChange = match.data().ratingChange;
+
+                var userName = match.data().user;
+                var opp = match.data().opponent;
+
+                var win = match.data().win;
+
+                console.log(match.data());
+
+                if (match.data().opponent == localStorage.getItem("username")){
+                    console.log("Hello");
+                    ratingChange *= -1;
+                    userName = match.data().opponent;
+                    opp = match.data().user;
+                    win = !win;
+                }
+                var change = (eval(ratingChange) > 0) ? "+" + ratingChange : ratingChange;
+                var historycardholder = document.getElementById("basehistorycard").cloneNode(true);
+                historycardholder.classList.remove("hidden");
+                var card = historycardholder.children[0];
+                card.children[0].children[0].setAttribute("src", (!match.data().modded) ? "profile/icons/unmoddedIcon512512.png" : "profile/icons/moddedIcon512512.png")
+                    card.children[1].children[0].innerHTML = userName;
+                    card.children[1].children[1].innerHTML = opp;
+                    if (win) {
+                        card.children[2].children[0].innerHTML = "Win(" + ratingChange + ")";
+                        card.children[2].children[1].innerHTML = "Lose(" + eval(-1 * ratingChange) + ")";
+                    } else {
+                        card.children[2].children[0].innerHTML = "Lose(" + ratingChange + ")";
+                        card.children[2].children[1].innerHTML = "Win(" + eval(-1 * ratingChange) + ")";
+                    }
+                    card.children[3].innerHTML = match.data().date;
+                    document.getElementById("matchhistorylist").children[0].appendChild(historycardholder);
             })
-            .catch((error) => {
-                console.error("Error getting documents: ", error);
-            });
+        });
     }
+    async function getApplicableMatchHisotry() {
+        const matchHistoryRef = db.collection("matchHistory");
+        const isUser = matchHistoryRef.where('user', '==', localStorage.getItem("username")).orderBy("timefrom", "desc").get();
+        const isOpp = matchHistoryRef.where('opponent', '==', localStorage.getItem("username")).orderBy("timefrom", "desc").get();
 
+        const [userQuerySnapshot, oppQeurySnapshot] = await Promise.all([
+            isUser,
+            isOpp
+        ]);
+
+        const userArray = userQuerySnapshot.docs;
+        const oppArray = oppQeurySnapshot.docs;
+
+        const fullArray = userArray.concat(oppArray);
+
+        return fullArray;
+    }
     function deleteAccount() {
         if (prompt("Type your username here to permanetly delete this Account (" + localStorage.getItem("username") + ")") == localStorage.getItem("username")) {
             db.collection("users").where("username", "==", localStorage.getItem('username'))

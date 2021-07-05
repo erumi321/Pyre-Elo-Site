@@ -196,9 +196,11 @@
                                             document.getElementById("new--rating").innerHTML = "Your rating is: " + Math.round(player.data().rating + changeA)
                                             localStorage.setItem("rating", Math.round(player.data().rating + changeA));
                                             document.getElementById("scorelabel").innerHTML = "Score: " + currentRating;
-                                            db.collection("users").doc(player.id).collection("matchHistory").add({
+                                            db.collection("matchHistory").add({
                                                 opponent: opp.data().username,
+                                                user: player.data().username,
                                                 oppRating: opp.data().rating, //Rating at the time of match before score applied
+                                                userRating: Math.max(Math.round(player.data().rating - changeA), 1), //Rating at the time of match before score applied
                                                 win: isWin,
                                                 ratingChange: changeA,
                                                 modded: modded,
@@ -215,24 +217,9 @@
                                         password: opp.data().password,
                                         username: opp.data().username,
                                         rating: Math.max(Math.round(opp.data().rating + changeB), 1)
-                                    })
-                                        .then(() => {
-                                            var d = new Date();
-                                            db.collection("users").doc(opp.id).collection("matchHistory").add({
-                                                opponent: player.data().username,
-                                                oppRating: player.data().rating, //Rating at the time of match before score applied
-                                                win: !isWin,
-                                                ratingChange: changeB,
-                                                modded: modded,
-                                                date: eval(d.getMonth() + 1) + "/" + d.getDate() + "/" + d.getFullYear(),
-                                                timefrom: d.getTime()
-                                            }).catch((error) => {
-                                                console.error("Error adding new item to opponent history: ", error);
-                                            });
-                                        })
-                                        .catch((error) => {
-                                            console.error("Error writing document: ", error);
-                                        });
+                                    }).catch((error) => {
+                                        console.error("Error writing document: ", error);
+                                    });
                                 });
                             });
                     });

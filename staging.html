@@ -289,8 +289,6 @@
                                         tempBS = Math.max(Math.round(tempBS + changeB), 1)
                                     }
                                     db.collection("users").doc(player.id).set({
-                                        password: player.data().password,
-                                        username: player.data().username,
                                         rating: tempAS
                                     })
                                         .then(() => {
@@ -298,14 +296,23 @@
                                             localStorage.setItem("rating", tempAS);
                                             document.getElementById("scorelabel").innerHTML = "Score: " + currentRating;
                                             for (var i = 0; i < matchLogA.length; i++) {
-                                                db.collection("users").doc(player.id).collection("matchHistory").add({
+                                                db.collection("matchHistory").add({
                                                     opponent: opp.data().username,
+                                                    user: user.data().username,
                                                     oppRating: matchLogA[i]["oppRating"],
+                                                    userRating: matchLogB[i]["oppRating"],
                                                     win: matchLogA[i]["win"],
                                                     ratingChange: matchLogA[i]["ratingChange"],
                                                     modded: matchLogA[i]["modded"],
                                                     date: eval(d.getMonth() + 1) + "/" + d.getDate() + "/" + d.getFullYear(),
                                                     timefrom: d.getTime()
+                                                }).then(() => {
+                                                    if (i == matchLogA.length - 1) {
+                                                        for (var i = 2; i < matchHolder.childElementCount; i++) {
+                                                            matchHolder.removeChild(matchHolder.children[i]);
+                                                        }
+                                                        alert("Succesfully updated all values");
+                                                    }
                                                 }).catch((error) => {
                                                     console.error("Error adding new item to user history: ", error);
                                                 });
@@ -315,35 +322,8 @@
                                             console.error("Error writing document: ", error);
                                         });
                                     db.collection("users").doc(opp.id).set({
-                                        password: opp.data().password,
-                                        username: opp.data().username,
                                         rating: tempBS
-                                    })
-                                        .then(() => {
-                                            var d = new Date();
-                                            console.log("matchLogA: ", matchLogA);
-                                            for (var i = 0; i < matchLogB.length; i++) {
-                                                db.collection("users").doc(opp.id).collection("matchHistory").add({
-                                                    opponent: player.data().username,
-                                                    oppRating: matchLogB[i]["oppRating"],
-                                                    win: matchLogB[i]["win"],
-                                                    ratingChange: matchLogB[i]["ratingChange"],
-                                                    modded: matchLogB[i]["modded"],
-                                                    date: eval(d.getMonth() + 1) + "/" + d.getDate() + "/" + d.getFullYear(),
-                                                    timefrom: d.getTime()
-                                                }).then(() => {
-                                                    if (i == matchLogB.length - 1) {
-                                                        for (var i = 2; i < matchHolder.childElementCount; i++) {
-                                                            matchHolder.removeChild(matchHolder.children[i]);
-                                                        }
-                                                        alert("Succesfully updated all values");
-                                                    }
-                                                }).catch((error) => {
-                                                    console.error("Error adding new item to opponent history: ", error);
-                                                });
-                                            }
-                                        })
-                                        .catch((error) => {
+                                    }).catch((error) => {
                                             console.error("Error writing document: ", error);
                                         });
                                 });

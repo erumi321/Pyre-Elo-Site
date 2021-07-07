@@ -23,7 +23,8 @@
     <div class="topnav">
         <div class="left">
             <a href="index.html" onclick="window.open('index.html', '_self');">Home</a>
-            <a id="topnav--stagingv" href="staging.html" onclick="window.open('staging.html', '_self');">Staging</a>
+            <a href="history.html" onclick="window.open('history.html', '_self');">History</a>
+            <a id="topnav--staging" href="staging.html" onclick="window.open('staging.html', '_self');">Staging</a>
         </div>
         <div class="right">
             <p class="int--label" id="scorelabel">
@@ -87,7 +88,7 @@
                 var historycardholder = document.getElementById("basehistorycard").cloneNode(true);
                 historycardholder.classList.remove("hidden");
                 var card = historycardholder.children[0];
-                card.children[0].children[0].setAttribute("src", (!match.data().modded) ? "profile/icons/unmoddedIcon512512.png" : "profile/icons/moddedIcon512512.png")
+                card.children[0].children[0].setAttribute("src", (!match.data().modded) ? "icons/unmoddedIcon512512.png" : "icons/moddedIcon512512.png")
                     card.children[1].children[0].innerHTML = userName;
                     card.children[1].children[1].innerHTML = opp;
                     if (win) {
@@ -154,7 +155,7 @@
 <div class="historycard--holder hidden" id="basehistorycard">
     <div class="historycard">
         <div class="historycard--sidebar">
-            <img src="profile/icons/moddedIcon512512.png" alt="" class="historycard--image">
+            <img src="icons/moddedIcon512512.png" alt="" class="historycard--image">
         </div>
         <div class="main--playercol">
             <h2 class="profile--name">p1</h2>

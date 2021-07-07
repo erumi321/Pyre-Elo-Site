@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="universal.css">
+    <link rel="stylesheet" href="lightuniversal.css" id="universal--theme">
+    <link rel="stylesheet" href="history/history.css">
+    <link rel="stylesheet" href="history/lighthistory.css" id="page--theme">
+    <title>Page Title</title>
+
+    <!--Firebase Integration-->
+    <script src="https://www.gstatic.com/firebasejs/8.6.2/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.2/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.2/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.2/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.2/firebase-messaging.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.2/firebase-functions.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.2/firebase-storage.js"></script>
+    <script src="universal.js"></script>
+    <script src="skilldata.js"></script>
+</head>
+
+<body class="hidden" onload="universalSetup(); buildMatchHistory(); updateTheme('history');">
+    <div class="topnav">
+        <div class="left">
+            <a href="index.html" onclick="window.open('index.html', '_self');">Home</a>
+            <a href="history.html" class="active" onclick="window.open('history.html', '_self');">History</a>
+            <a id="topnav--staging" href="staging.html" onclick="window.open('staging.html', '_self');">Staging</a>
+        </div>
+        <div class="right">
+            <p class="int--label" id="scorelabel">
+                Score:
+            </p>
+            <a href="profile.html" id="topnav--loginbtn"
+                onclick="window.open('profile.html', '_self');">Profile</a>
+        </div>
+    </div>
+    <div class="flex--between">
+        <div class="center">
+            <ul class="matchhistorylist" id="matchhistorylist">
+                <div class="int--col">
+                    <h1 id="historylist--title">
+                        Match History
+                    </h1>
+                    <div class="center">
+                    </div>
+                </div>
+            </ul>
+        </div>
+        <div class="preview hidden" id ="preview">
+            <div class="center">
+                <div class="int--col">
+                    <h1 id="preview--title">title</h1>
+                    <div class="preview--result flex--between">
+                        <div class="int--col">
+                            <h1 id="result--title" style="padding-right: 15px;">Result</h1>
+                            <h1 id="result--result">p1 Wins</h1>
+                        </div>
+                        <div class="int--col" style="padding-left: 15px; text-align: left;">
+                            <p id="result--p1">p1 +10</p>
+                            <p id="result--p2">p2 -10</p>
+                        </div>
+                    </div>
+                    <div id="preview--details">
+                        <div class="p1" id="p1--icons">
+                            <h1 id="units--p1">p1 Units</h1>
+                            <div class="int--label" onmouseover="showTooltip(this)" onmouseout="hideTooltip(this)">
+                                <img src="icons/Portraits/CroneBertrude01.png" class="preview--icon" alt="">
+                            </div>
+                            <div class="int--label" onmouseover="showTooltip(this)" onmouseout="hideTooltip(this)">
+                                <img src="icons/Portraits/CroneBertrude01.png" class="preview--icon" alt="">
+                            </div>
+                            <div class="int--label" onmouseover="showTooltip(this)" onmouseout="hideTooltip(this)">
+                                <img src="icons/Portraits/CroneBertrude01.png" class="preview--icon" alt="">
+                            </div>
+                        </div>
+                        <div class="p2" id="p2--icons">
+                            <h1 id="units--p2">p2 Units</h1>
+                            <div class="int--label" onmouseover="showTooltip(this)" onmouseout="hideTooltip(this)">
+                                <img src="icons/Portraits/CroneBertrude01.png" class="preview--icon" alt="">
+                            </div>
+                            <div class="int--label" onmouseover="showTooltip(this)" onmouseout="hideTooltip(this)">
+                                <img src="icons/Portraits/CroneBertrude01.png" class="preview--icon" alt="">
+                            </div>
+                            <div class="int--label" onmouseover="showTooltip(this)" onmouseout="hideTooltip(this)">
+                                <img src="icons/Portraits/CroneBertrude01.png" class="preview--icon" alt="">
+                            </div>
+                        </div>
+                    </div>
+                    <h1 id="time--header">Date:</h1>
+                    <p id="preview--time">1/1/1990</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div class="tooltip--holder hidden" id="basetooltip">
+        <div class="tooltip">
+            <div class="int--col">
+                <div class="main--skillcontainer">
+                    <div class="int--col int--label">
+                        <div>
+                            <img src="icons/skills/skill_icon_aura.png" class="preview--icon int--label" alt="">
+                            <p class="int--label">SkillA</p>
+                        </div>
+                        <div>
+                            <img src="icons/skills/skill_icon_aura.png" class="preview--icon int--label" alt="">
+                            <p class="int--label">SkillB</p>
+                        </div>
+                    </div>
+                    <div class="int--col int--label">
+                        <div>
+                            <img src="icons/skills/skill_icon_aura.png" class="preview--icon int--label" alt="">
+                            <p class="int--label">SkillC</p>
+                        </div>
+                        <div>
+                            <img src="icons/skills/skill_icon_aura.png" class="preview--icon int--label" alt="">
+                            <p class="int--label">SkillD</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="main--talismancontainer">
+                    <img src="icons/talismans/_triestas_plume_01.png" class="preview--icon int--label" alt="">
+                    <p class="int--label">Talisman</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</body>
+<script>
+
+    function showTooltip(parentNode, data) {
+        var tooltip = document.getElementById("basetooltip");
+        var clonedTooltip = tooltip.cloneNode(true);
+        var newTooltip = document.body.appendChild(clonedTooltip);
+        var rect = parentNode.getBoundingClientRect();
+        console.log(rect.top, rect.right, rect.bottom, rect.left);
+        newTooltip.classList.remove("hidden");
+        newTooltip.setAttribute("style", "right: calc(100vw - " + rect.left + "px); bottom: calc(100vh - " + rect.bottom + "px);");
+        var main = newTooltip.children[0].children[0];
+        var skills = main.children[0];
+        var talisman = main.children[1];
+
+        var emptySkills = false;
+        var skillIndex = 0;
+        for(var x = 0; x < 2; x++) {
+            for(var y = 0; y < 2; y++) {
+                if (skillIndex >= data.Skills.length) {
+                    emptySkills = true;
+                }
+                if (emptySkills) {
+                    skills.children[x].children[y].children[0].remove();
+                    skills.children[x].children[y].children[0].remove();
+                }else{
+                    skills.children[x].children[y].children[0].setAttribute("src", "icons/skills/" + skillData[data.Skills[skillIndex]].Icon + ".png");
+                    skills.children[x].children[y].children[1].innerHTML = skillData[data.Skills[skillIndex]].Name;
+                }
+                skillIndex++;
+            }
+        }
+        if (data.ItemName != null) {
+            talisman.children[0].setAttribute("src", "icons/talismans/" + talismanData[data.ItemName].Icon + ".png");
+            talisman.children[1].innerHTML = talismanData[data.ItemName].Name;
+        }else{
+            talisman.remove();
+        }
+    }
+
+    function hideTooltip(parentNode) {
+        document.getElementById("basetooltip").remove();
+        document.getElementById("basetooltip").classList.add("hidden");
+    }
+
+    function displayCardInfo(card, data) {
+
+        var p1Name = card.children[1].children[0].innerHTML;
+        var p2Name = card.children[1].children[1].innerHTML;
+
+        var scoreChange1 = card.children[2].children[0].innerHTML;
+        var scoreChange2 = card.children[2].children[1].innerHTML;
+
+        var time = card.children[3].innerHTML;
+        
+        document.getElementById("preview").classList.remove("hidden");
+
+        document.getElementById("preview--title").innerHTML = p1Name + " vs " + p2Name;
+
+        document.getElementById("result--p1").innerHTML = scoreChange1;
+        document.getElementById("result--p2").innerHTML = scoreChange2;
+        document.getElementById("preview--time").innerHTML = time;
+        
+        var p1Icons = document.getElementById("p1--icons");
+        var p2Icons = document.getElementById("p2--icons");
+
+        if (data.exilesA.includes(null)) {
+            p1Icons.innerHTML = `
+                <h1 id="units--p1">p1 Units</h1>
+                <h1>Insufficent Data</h1>
+            `;
+            p2Icons.innerHTML = `
+                <h1 id="units--p2">p2 Units</h1>
+                <h1>Insufficent Data</h1>
+            `;
+        }else{
+            for (var i = 0; i < 3; i++) {
+                var p1Data = data.exilesA[i];
+                p1Icons.children[i + 1].setAttribute("onmouseover", "showTooltip(this, "+ JSON.stringify(p1Data) + ")");
+                p1Icons.children[i + 1].children[0].setAttribute("src", "icons/Portraits/" + p1Data.Portrait + ".png");
+
+                var p2Data = data.exilesB[i];
+                p2Icons.children[i + 1].setAttribute("onmouseover", "showTooltip(this, "+ JSON.stringify(p2Data) + ")");
+                p2Icons.children[i + 1].children[0].setAttribute("src", "icons/Portraits/" + p2Data.Portrait + ".png");
+            }
+        }
+
+
+    }
+
+    function buildMatchHistory() {
+        db.collection("matchHistory").orderBy("timefrom", "desc").get().then(historySnapshot => {
+            historySnapshot.forEach((match) => {
+                var ratingChange = match.data().ratingChange;
+
+                var userName = match.data().user;
+                var opp = match.data().opponent;
+
+                var win = match.data().win;
+
+                if (match.data().opponent == localStorage.getItem("username")){
+                    ratingChange *= -1;
+                    userName = match.data().opponent;
+                    opp = match.data().user;
+                    win = !win;
+                }
+                var change = (eval(ratingChange) > 0) ? "+" + ratingChange : ratingChange;
+                var historycardholder = document.getElementById("basehistorycard").cloneNode(true);
+                historycardholder.classList.remove("hidden");
+                var card = historycardholder.children[0];
+                card.setAttribute("onclick", "displayCardInfo(this, " + JSON.stringify(match.data()) + ")");
+                card.children[0].children[0].setAttribute("src", (!match.data().modded) ? "icons/unmoddedIcon512512.png" : "icons/moddedIcon512512.png")
+                    card.children[1].children[0].innerHTML = userName;
+                    card.children[1].children[1].innerHTML = opp;
+                    if (win) {
+                        card.children[2].children[0].innerHTML = "Win(" + ratingChange + ")";
+                        card.children[2].children[1].innerHTML = "Lose(" + eval(-1 * ratingChange) + ")";
+                    } else {
+                        card.children[2].children[0].innerHTML = "Lose(" + ratingChange + ")";
+                        card.children[2].children[1].innerHTML = "Win(" + eval(-1 * ratingChange) + ")";
+                    }
+                    card.children[3].innerHTML = match.data().date;
+                    document.getElementById("matchhistorylist").children[0].appendChild(historycardholder);
+            })
+        });
+    }
+    function deleteAccount() {
+        if (prompt("Type your username here to permanetly delete this Account (" + localStorage.getItem("username") + ")") == localStorage.getItem("username")) {
+            db.collection("users").where("username", "==", localStorage.getItem('username'))
+                .get()
+                .then((querySnapshot) => {
+                    querySnapshot.forEach((user) => {
+                        db.collection("users").doc(user.id).delete().then(() => {
+                            logout();
+                        }).catch((error) => {
+                            console.error("Error removing document: ", error);
+                        });
+                    });
+                })
+                .catch((error) => {
+                    console.error("Error getting documents: ", error);
+                });
+        }
+    }
+
+    function toggleDarkMode() {
+        if (localStorage.getItem("theme") == "light") {
+            localStorage.setItem("theme", "dark");
+        } else {
+            localStorage.setItem("theme", "light");
+        }
+        updateTheme("profile");
+    }
+
+</script>
+<div class="historycard--holder hidden" id="basehistorycard">
+    <div class="historycard" onclick="displayCardInfo(this, 'data')">
+        <div class="historycard--sidebar">
+            <img src="icons/moddedIcon512512.png" alt="" class="historycard--image">
+        </div>
+        <div class="main--playercol">
+            <h2 class="profile--name">p1</h2>
+            <h2 class="profile--name">p2</h2>
+        </div>
+        <div class="main--result">
+            <p class="main--scoretext">Win (+10)</p>
+            <p class="main--scoretext">Lose (-10)</p>
+        </div>
+        <p class="main--date">
+            01/01/1990
+        </p>
+    </div>
+</div>
+
+</html>

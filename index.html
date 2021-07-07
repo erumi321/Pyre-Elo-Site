@@ -25,6 +25,7 @@
     <div class="topnav">
         <div class="left">
             <a class="active" href="index.html" onclick="window.open('index.html', '_self');">Home</a>
+            <a href="history.html" onclick="window.open('history.html', '_self');">History</a>
             <a id="topnav--staging" href="staging.html" onclick="window.open('staging.html', '_self');">Staging</a>
         </div>
         <div class="right">
@@ -50,12 +51,12 @@
             </div>
             <div class="hero--buttonrow">
                 <a href="#main">
-                    <button class="confirmbutton hero--button" onclick="submitNewValues()">
-                        <span>Main</span>
+                    <button class="confirmbutton hero--button" onclick="window.open('history.html', '_self');">
+                        <span>Match History Database</span>
                     </button>
                 </a>
                 <a href="profile.html" id="herobutton--profile" onclick="window.open('profile.html', '_self');">
-                    <button class="confirmbutton hero--button" onclick="submitNewValues()">
+                    <button class="confirmbutton hero--button">
                         <span id="herobutton--profile--text">Profile</span>
                     </button>
                 </a>
@@ -205,7 +206,9 @@
                                                 ratingChange: changeA,
                                                 modded: modded,
                                                 date: eval(d.getMonth() + 1) + "/" + d.getDate() + "/" + d.getFullYear(),
-                                                timefrom: d.getTime()
+                                                timefrom: d.getTime(),
+                                                exilesA: [null, null, null],
+                                                exilesB: [null, null, null]
                                             }).catch((error) => {
                                                 console.error("Error adding new item to user history: ", error);
                                             });

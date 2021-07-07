@@ -18,6 +18,7 @@
     <script src="https://www.gstatic.com/firebasejs/8.6.2/firebase-storage.js"></script>
     <script src="universal.js"></script>
     <script src="character-data.js"></script>
+    <script src="skilldata.js"></script>
 
 </head>
 
@@ -25,6 +26,7 @@
     <div class="topnav">
         <div class="left">
             <a href="index.html" onclick="window.open('index.html', '_self');">Home</a>
+            <a href="history.html" onclick="window.open('history.html', '_self');">History</a>
             <a id="topnav--staging" href="staging.html" class="active"
                 onclick="window.open('staging.html', '_self');">Staging</a>
             <section id="pyre" class="int--label" style="padding-left: 30px; transform: translateY(33%);">
@@ -80,6 +82,9 @@
 <script>
     var username = localStorage.getItem("username");
     var oppName = "";
+
+    var TeamACharacters;
+    var TeamBCharacters;
     function recordMatch(message) {
         var data = message.message;
         console.log("Recording", data);
@@ -88,7 +93,7 @@
         var card = historycardholder.children[0].children[0].children[0]; //gets int--col above main
         var main = card.children[0]; //gets main
         var icons = card.children[1]; //gets the icon container
-        main.children[0].children[0].setAttribute("src", (data.modded) ? "profile/icons/unmoddedIcon512512.png" : "profile/icons/moddedIcon512512.png")
+        main.children[0].children[0].setAttribute("src", (data.modded) ? "icons/unmoddedIcon512512.png" : "icons/moddedIcon512512.png")
         main.children[1].children[0].innerHTML = localStorage.getItem("username");
         var matchOppName = (oppName == "" || oppName == null) ? "Unset" : oppName;
         main.children[1].children[1].innerHTML = matchOppName
@@ -99,13 +104,16 @@
             main.children[2].children[0].innerHTML = "Lose";
             main.children[2].children[1].innerHTML = "Win";
         }
-        console.log(data.TeamACharacters);
+
+        TeamACharacters = data.TeamACharacters;
+        TeamBCharacters = data.TeamBCharacters;
+
         for (var i = 0; i < 3; i++) {
 
-            icons.children[i].setAttribute("src", "staging/icons/Portraits/" + data.TeamACharacters[i].Portrait + ".png");
+            icons.children[i].setAttribute("src", "icons/Portraits/" + data.TeamACharacters[i].Portrait + ".png");
         }
         for (var i = 0; i < 3; i++) {
-            icons.children[i + 4].setAttribute("src", "staging/icons/Portraits/" + data.TeamBCharacters[i].Portrait + ".png");
+            icons.children[i + 4].setAttribute("src", "icons/Portraits/" + data.TeamBCharacters[i].Portrait + ".png");
         }
         var holder = document.getElementById("matchhistorylist");
         var inputForm = historycardholder.children[1].children[0];
@@ -289,30 +297,54 @@
                                         tempBS = Math.max(Math.round(tempBS + changeB), 1)
                                     }
                                     db.collection("users").doc(player.id).set({
+                                        username: player.data().username,
+                                        password: player.data().password,
                                         rating: tempAS
                                     })
                                         .then(() => {
                                             var d = new Date();
                                             localStorage.setItem("rating", tempAS);
                                             document.getElementById("scorelabel").innerHTML = "Score: " + currentRating;
+                                            //Need Portrait, ShortName, Skills, Upgradeitem.ItemName
+                                            var exilesA = [];
+                                            var exilesB = [];
+
+                                            for (var i = 0; i < 3; i++){
+                                                var skillsA = TeamACharacters[i].Skills.filter( ( el ) => skillData[el] != null );
+                                                var skillsB = TeamBCharacters[i].Skills.filter( ( el ) => skillData[el] != null );
+                                                var TalismanA = TeamACharacters[i].UpgradeItem != null ? TeamACharacters[i].UpgradeItem.ItemName : null;
+                                                var TalismanB = TeamBCharacters[i].UpgradeItem != null ? TeamBCharacters[i].UpgradeItem.ItemName : null;
+                                                exilesA.push({
+                                                    Portrait: TeamACharacters[i].Portrait,
+                                                    ShortName: TeamACharacters[i].Portrait,
+                                                    Skills: skillsA,
+                                                    ItemName: TalismanA,
+                                                });
+                                                exilesB.push({
+                                                    Portrait: TeamBCharacters[i].Portrait,
+                                                    ShortName: TeamBCharacters[i].Portrait,
+                                                    Skills: skillsB,
+                                                    ItemName: TalismanB,
+                                                });
+                                            }
                                             for (var i = 0; i < matchLogA.length; i++) {
                                                 db.collection("matchHistory").add({
                                                     opponent: opp.data().username,
-                                                    user: user.data().username,
+                                                    user: player.data().username,
                                                     oppRating: matchLogA[i]["oppRating"],
                                                     userRating: matchLogB[i]["oppRating"],
                                                     win: matchLogA[i]["win"],
                                                     ratingChange: matchLogA[i]["ratingChange"],
                                                     modded: matchLogA[i]["modded"],
                                                     date: eval(d.getMonth() + 1) + "/" + d.getDate() + "/" + d.getFullYear(),
-                                                    timefrom: d.getTime()
+                                                    timefrom: d.getTime(),
+                                                    exilesA: exilesA,
+                                                    exilesB: exilesB
                                                 }).then(() => {
-                                                    if (i == matchLogA.length - 1) {
-                                                        for (var i = 2; i < matchHolder.childElementCount; i++) {
-                                                            matchHolder.removeChild(matchHolder.children[i]);
-                                                        }
-                                                        alert("Succesfully updated all values");
+                                                    for (var i = 2; i < matchHolder.childElementCount; i++) {
+                                                        matchHolder.removeChild(matchHolder.children[i]);
                                                     }
+                                                    alert("Succesfully updated all values");
                                                 }).catch((error) => {
                                                     console.error("Error adding new item to user history: ", error);
                                                 });
@@ -322,6 +354,8 @@
                                             console.error("Error writing document: ", error);
                                         });
                                     db.collection("users").doc(opp.id).set({
+                                        username: opp.data().username,
+                                        password: opp.data().password,
                                         rating: tempBS
                                     }).catch((error) => {
                                             console.error("Error writing document: ", error);
@@ -345,7 +379,7 @@
             <div class="int--col">
                 <div class="main">
                     <div class="historycard--sidebar int--label">
-                        <img src="profile/icons/moddedIcon512512.png" alt="" class="historycard--image">
+                        <img src="icons/moddedIcon512512.png" alt="" class="historycard--image">
                     </div>
                     <div class="main--playercol int--label">
                         <h2 class="profile--name">Team A</h2>
@@ -357,13 +391,13 @@
                     </div>
                 </div>
                 <div class="icons">
-                    <img src="staging/icons/Portraits/CroneBertrude01.png" class="historycard--icon" alt="">
-                    <img src="staging/icons/Portraits/CroneBertrude01.png" class="historycard--icon" alt="">
-                    <img src="staging/icons/Portraits/CroneBertrude01.png" class="historycard--icon" alt="">
+                    <img src="icons/Portraits/CroneBertrude01.png" class="historycard--icon" alt="">
+                    <img src="icons/Portraits/CroneBertrude01.png" class="historycard--icon" alt="">
+                    <img src="icons/Portraits/CroneBertrude01.png" class="historycard--icon" alt="">
                     <p>vs</p>
-                    <img src="staging/icons/Portraits/CroneBertrude01.png" class="historycard--icon" alt="">
-                    <img src="staging/icons/Portraits/CroneBertrude01.png" class="historycard--icon" alt="">
-                    <img src="staging/icons/Portraits/CroneBertrude01.png" class="historycard--icon" alt="">
+                    <img src="icons/Portraits/CroneBertrude01.png" class="historycard--icon" alt="">
+                    <img src="icons/Portraits/CroneBertrude01.png" class="historycard--icon" alt="">
+                    <img src="icons/Portraits/CroneBertrude01.png" class="historycard--icon" alt="">
                 </div>
             </div>
         </div>

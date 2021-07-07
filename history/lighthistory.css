@@ -1,0 +1,31 @@
+body {
+    background-color: center;
+}
+
+.historycard {
+    background-color: #fff;
+    border: solid #201f73;
+    transition: background-color 0.3s;
+}
+
+.historycard:hover {
+    background-color: #ddd;
+    transition: background-color 0.3s;
+}
+
+.confirmbutton--red {
+    border: 3px solid red;
+    color: red;
+}
+
+.confirmbutton--red:hover{
+    background: red;
+    color: #fff;
+    transition: 0.3s ease-in-out;
+}
+
+.tooltip {
+    background-color: #fff;
+    border: solid #201f73;
+    transition: background-color 0.3s;
+}

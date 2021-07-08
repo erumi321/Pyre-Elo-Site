@@ -25,14 +25,16 @@ function universalSetup() {
 	}
 	if (localStorage.getItem("username") != null && localStorage.getItem("username") != "" && localStorage.getItem("password") != null && localStorage.getItem("password") != "") {
 		var d = new Date();
-		if ((d.getMinutes() % 5 == 0 && localStorage.getItem("nextCycle")) || setUpSnapshot == null) {
+		if (localStorage.getItem("lastSetupReadTime") == null) {
+			localStorage.setItem("lastSetupReadTime", 0);
+		}
+		if (localStorage.getItem("lastSetupReadTime") + 300000 <= d.getTime() || setUpSnapshot == null) {
 			db.collection("users")
 				.where("username", "==", localStorage.getItem("username"))
 				.where("password", "==", sha256(localStorage.getItem("password")))
 				.get()
 				.then((querySnapshot) => {
-					localStorage.setItem("nextCycle", false);
-					console.log("new read");
+					localStorage.setItem("lastSetupReadTime", d.getTime());
 					setUpSnapshot = querySnapshot;
 					localStorage.setItem("setUpSnapshot", JSON.stringify(querySnapshot.docs));
 					console.log("set");
@@ -55,7 +57,6 @@ function universalSetup() {
 					document.getElementById("topnav--loginbtn").setAttribute("onlick", "window.open('profile.html', '_self');");
 				});
 		} else {
-			console.log("old values");
 			if (currentRating == null) {
 				currentRating = setUpSnapshot[0].data().rating;
 				localStorage.setItem("rating", setUpSnapshot[0].data().rating);
@@ -66,9 +67,6 @@ function universalSetup() {
 			document.getElementById("scorelabel").innerHTML = "Score: " + currentRating;
 			document.getElementById("topnav--loginbtn").setAttribute("href", "profile.html");
 			document.getElementById("topnav--loginbtn").setAttribute("onlick", "window.open('profile.html', '_self');");
-		}
-		if (d.getMinutes() % 5 != 0 && !localStorage.getItem("nextCycle")) {
-			localStorage.setItem("nextCycle", true);
 		}
 	} else {
 		document.getElementById("topnav--loginbtn").innerHTML = "Log-In / Register";

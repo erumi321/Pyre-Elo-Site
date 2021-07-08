@@ -215,10 +215,59 @@
 
 
     }
-
+    var storedHistorySnapshot = JSON.parse(localStorage.getItem("historySnapshot"));
     function buildMatchHistory() {
-        db.collection("matchHistory").orderBy("timefrom", "desc").get().then(historySnapshot => {
-            historySnapshot.forEach((match) => {
+        if (localStorage.getItem("nextCycleHistory") == null){
+		    localStorage.setItem("nextCycleHistory", true);
+	    }
+        var d = new Date();
+        if (localStorage.getItem("lastHistoryReadTime") == null) {
+			localStorage.setItem("lastHistoryReadTime   ", 0);
+		}
+        console.log(parseInt(localStorage.getItem("lastHistoryReadTime")) + 60000);
+        console.log(d.getTime());
+		if (parseInt(localStorage.getItem("lastHistoryReadTime")) + 60000 <= d.getTime() || storedHistorySnapshot == null) {
+            console.log("new");
+            db.collection("matchHistory").orderBy("timefrom", "desc").get().then(historySnapshot => {
+                localStorage.setItem("lastHistoryReadTime", d.getTime());
+                storedHistorySnapshot = historySnapshot;
+                localStorage.setItem("historySnapshot", JSON.stringify(historySnapshot.docs));
+                historySnapshot.forEach((match) => {
+                    var ratingChange = match.data().ratingChange;
+
+                    var userName = match.data().user;
+                    var opp = match.data().opponent;
+
+                    var win = match.data().win;
+
+                    if (match.data().opponent == localStorage.getItem("username")){
+                        ratingChange *= -1;
+                        userName = match.data().opponent;
+                        opp = match.data().user;
+                        win = !win;
+                    }
+                    var change = (eval(ratingChange) > 0) ? "+" + ratingChange : ratingChange;
+                    var historycardholder = document.getElementById("basehistorycard").cloneNode(true);
+                    historycardholder.classList.remove("hidden");
+                    var card = historycardholder.children[0];
+                    card.setAttribute("onclick", "displayCardInfo(this, " + JSON.stringify(match.data()) + ")");
+                    card.children[0].children[0].setAttribute("src", (!match.data().modded) ? "icons/unmoddedIcon512512.png" : "icons/moddedIcon512512.png")
+                        card.children[1].children[0].innerHTML = userName;
+                        card.children[1].children[1].innerHTML = opp;
+                        if (win) {
+                            card.children[2].children[0].innerHTML = "Win(" + ratingChange + ")";
+                            card.children[2].children[1].innerHTML = "Lose(" + eval(-1 * ratingChange) + ")";
+                        } else {
+                            card.children[2].children[0].innerHTML = "Lose(" + ratingChange + ")";
+                            card.children[2].children[1].innerHTML = "Win(" + eval(-1 * ratingChange) + ")";
+                        }
+                        card.children[3].innerHTML = match.data().date;
+                        document.getElementById("matchhistorylist").children[0].appendChild(historycardholder);
+                })
+            });
+        } else {
+            console.log("old");
+            storedHistorySnapshot.forEach((match) => {
                 var ratingChange = match.data().ratingChange;
 
                 var userName = match.data().user;
@@ -250,7 +299,7 @@
                     card.children[3].innerHTML = match.data().date;
                     document.getElementById("matchhistorylist").children[0].appendChild(historycardholder);
             })
-        });
+        }
     }
     function deleteAccount() {
         if (prompt("Type your username here to permanetly delete this Account (" + localStorage.getItem("username") + ")") == localStorage.getItem("username")) {

@@ -29,3 +29,9 @@ body {
     border: solid #201f73;
     transition: background-color 0.3s;
 }
+
+.preview {
+    background-color: #fff;
+    border: solid #201f73;
+    transition: background-color 0.3s;
+}

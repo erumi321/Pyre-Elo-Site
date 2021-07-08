@@ -212,7 +212,8 @@
                 p2Icons.children[i + 1].children[0].setAttribute("src", "icons/Portraits/" + p2Data.Portrait + ".png");
             }
         }
-
+        document.getElementById("units--p1").innerHTML = p1Name + "Units";
+        document.getElementById("units--p2").innerHTML = p2Name + "Units";
 
     }
     var storedHistorySnapshot = JSON.parse(localStorage.getItem("historySnapshot"));
@@ -224,10 +225,7 @@
         if (localStorage.getItem("lastHistoryReadTime") == null) {
 			localStorage.setItem("lastHistoryReadTime   ", 0);
 		}
-        console.log(parseInt(localStorage.getItem("lastHistoryReadTime")) + 60000);
-        console.log(d.getTime());
 		if (parseInt(localStorage.getItem("lastHistoryReadTime")) + 60000 <= d.getTime() || storedHistorySnapshot == null) {
-            console.log("new");
             db.collection("matchHistory").orderBy("timefrom", "desc").get().then(historySnapshot => {
                 localStorage.setItem("lastHistoryReadTime", d.getTime());
                 storedHistorySnapshot = historySnapshot;
@@ -266,7 +264,6 @@
                 })
             });
         } else {
-            console.log("old");
             storedHistorySnapshot.forEach((match) => {
                 var ratingChange = match.data().ratingChange;
 

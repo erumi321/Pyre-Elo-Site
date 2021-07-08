@@ -28,7 +28,7 @@ function universalSetup() {
 		if (localStorage.getItem("lastSetupReadTime") == null) {
 			localStorage.setItem("lastSetupReadTime", 0);
 		}
-		if (localStorage.getItem("lastSetupReadTime") + 300000 <= d.getTime() || setUpSnapshot == null) {
+		if (parseInt(localStorage.getItem("lastSetupReadTime")) + 300000 <= d.getTime() || setUpSnapshot == null) {
 			db.collection("users")
 				.where("username", "==", localStorage.getItem("username"))
 				.where("password", "==", sha256(localStorage.getItem("password")))
@@ -37,27 +37,23 @@ function universalSetup() {
 					localStorage.setItem("lastSetupReadTime", d.getTime());
 					setUpSnapshot = querySnapshot;
 					localStorage.setItem("setUpSnapshot", JSON.stringify(querySnapshot.docs));
-					console.log("set");
 					if (querySnapshot.docs == null || querySnapshot.docs.length == 0) {
 						alert("Inccorrect log-in, don't do that man");
 						logout();
 						return;
 					}
-					if (currentRating == null) {
-						querySnapshot.forEach((player) => {
-							currentRating = player.data().rating;
-							localStorage.setItem("rating", player.data().rating);
-						});
-					} else {
-						currentRating = localStorage.getItem("rating");
-					}
+					querySnapshot.forEach((player) => {
+						currentRating = player.data().rating;
+						localStorage.setItem("rating", player.data().rating);
+					});
 					document.getElementById("topnav--loginbtn").innerHTML = "Profile";
 					document.getElementById("scorelabel").innerHTML = "Score: " + currentRating;
 					document.getElementById("topnav--loginbtn").setAttribute("href", "profile.html");
 					document.getElementById("topnav--loginbtn").setAttribute("onlick", "window.open('profile.html', '_self');");
 				});
 		} else {
-			if (currentRating == null) {
+		console.log("old");
+		if (currentRating == null) {
 				currentRating = setUpSnapshot[0].data().rating;
 				localStorage.setItem("rating", setUpSnapshot[0].data().rating);
 			} else {

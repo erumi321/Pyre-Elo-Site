@@ -7,13 +7,3 @@ body {
     border: solid #999;
     color: #aaa;
 }
-
-.confirmbutton--red {
-    border: 3px solid red;
-    color: red;
-}
-
-.confirmbutton--red:hover{
-    background: #404040;
-    color: #fff;
-}

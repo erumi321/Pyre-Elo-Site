@@ -58,7 +58,6 @@
     justify-content: center;
     text-align: center;
 }
-
 .preview {
     position: absolute;
     bottom: calc(95vh - 240px);
@@ -95,7 +94,6 @@
     box-sizing: border-box;
     padding: 0px 10px;
 }
-
 .hidden {
     display: none;
 }

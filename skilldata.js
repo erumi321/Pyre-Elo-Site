@@ -457,7 +457,7 @@ var talismanData = {
         Name : "Ore's Scale"
     },
     UniqueFlyingItem01 : {
-        Icon : "_triestas_plume_01",
+        Icon : "triestas_plume_01",
         Name : "Triesta's Plume"
     },
     UniqueTreeItem01 : {
@@ -470,7 +470,7 @@ var talismanData = {
     },
     PlusSpeedItem : {
         Icon : "tailwind_crest_01",
-        name : "Tailwind Crest"
+        Name : "Tailwind Crest"
     },
     TeamStaminaRechargeItem : {
         Icon : "mottled_flask_01",

@@ -90,7 +90,6 @@
                     <p id="preview--time">1/1/1990</p>
                 </div>
             </div>
-
         </div>
     </div>
     <div class="tooltip--holder hidden" id="basetooltip">
@@ -142,27 +141,29 @@
         var talisman = main.children[1];
 
         var emptySkills = false;
-        var skillIndex = 0;
         for(var x = 0; x < 2; x++) {
             for(var y = 0; y < 2; y++) {
-                if (skillIndex >= data.Skills.length) {
+                if ((x*2) + y >= data.Skills.length) {
                     emptySkills = true;
                 }
                 if (emptySkills) {
-                    skills.children[x].children[y].children[0].remove();
-                    skills.children[x].children[y].children[0].remove();
+                    skills.children[x].children[y].classList.add("hidden");
                 }else{
-                    skills.children[x].children[y].children[0].setAttribute("src", "icons/skills/" + skillData[data.Skills[skillIndex]].Icon + ".png");
-                    skills.children[x].children[y].children[1].innerHTML = skillData[data.Skills[skillIndex]].Name;
+                    console.log((x * 2)+y)
+                    console.log("icons/skills/" + skillData[data.Skills[(x * 2)+y]].Icon + ".png")
+                    skills.children[x].children[y].children[0].setAttribute("src", "icons/skills/" + skillData[data.Skills[(x * 2)+y]].Icon + ".png");
+                    console.log(skillData[data.Skills[(x*2)+y]].Name);
+                    skills.children[x].children[y].children[1].innerHTML = skillData[data.Skills[(x * 2)+y]].Name;
+                    skills.children[x].children[y].classList.remove("hidden");
                 }
-                skillIndex++;
             }
         }
         if (data.ItemName != null) {
             talisman.children[0].setAttribute("src", "icons/talismans/" + talismanData[data.ItemName].Icon + ".png");
             talisman.children[1].innerHTML = talismanData[data.ItemName].Name;
+            talisman.classList.remove("hidden");
         }else{
-            talisman.remove();
+            talisman.classList.add("hidden");
         }
     }
 
@@ -229,8 +230,10 @@
             db.collection("matchHistory").orderBy("timefrom", "desc").get().then(historySnapshot => {
                 localStorage.setItem("lastHistoryReadTime", d.getTime());
                 storedHistorySnapshot = historySnapshot;
-                localStorage.setItem("historySnapshot", JSON.stringify(historySnapshot.docs));
+                var matchList = [];
+                var matchesBuilt = 0;
                 historySnapshot.forEach((match) => {
+                    matchList.push(match.data());
                     var ratingChange = match.data().ratingChange;
 
                     var userName = match.data().user;
@@ -250,40 +253,6 @@
                     var card = historycardholder.children[0];
                     card.setAttribute("onclick", "displayCardInfo(this, " + JSON.stringify(match.data()) + ")");
                     card.children[0].children[0].setAttribute("src", (!match.data().modded) ? "icons/unmoddedIcon512512.png" : "icons/moddedIcon512512.png")
-                        card.children[1].children[0].innerHTML = userName;
-                        card.children[1].children[1].innerHTML = opp;
-                        if (win) {
-                            card.children[2].children[0].innerHTML = "Win(" + ratingChange + ")";
-                            card.children[2].children[1].innerHTML = "Lose(" + eval(-1 * ratingChange) + ")";
-                        } else {
-                            card.children[2].children[0].innerHTML = "Lose(" + ratingChange + ")";
-                            card.children[2].children[1].innerHTML = "Win(" + eval(-1 * ratingChange) + ")";
-                        }
-                        card.children[3].innerHTML = match.data().date;
-                        document.getElementById("matchhistorylist").children[0].appendChild(historycardholder);
-                })
-            });
-        } else {
-            storedHistorySnapshot.forEach((match) => {
-                var ratingChange = match.data().ratingChange;
-
-                var userName = match.data().user;
-                var opp = match.data().opponent;
-
-                var win = match.data().win;
-
-                if (match.data().opponent == localStorage.getItem("username")){
-                    ratingChange *= -1;
-                    userName = match.data().opponent;
-                    opp = match.data().user;
-                    win = !win;
-                }
-                var change = (eval(ratingChange) > 0) ? "+" + ratingChange : ratingChange;
-                var historycardholder = document.getElementById("basehistorycard").cloneNode(true);
-                historycardholder.classList.remove("hidden");
-                var card = historycardholder.children[0];
-                card.setAttribute("onclick", "displayCardInfo(this, " + JSON.stringify(match.data()) + ")");
-                card.children[0].children[0].setAttribute("src", (!match.data().modded) ? "icons/unmoddedIcon512512.png" : "icons/moddedIcon512512.png")
                     card.children[1].children[0].innerHTML = userName;
                     card.children[1].children[1].innerHTML = opp;
                     if (win) {
@@ -294,6 +263,46 @@
                         card.children[2].children[1].innerHTML = "Win(" + eval(-1 * ratingChange) + ")";
                     }
                     card.children[3].innerHTML = match.data().date;
+                    document.getElementById("matchhistorylist").children[0].appendChild(historycardholder);
+
+                    matchesBuilt++;
+                    if (matchesBuilt == historySnapshot.docs.length){
+                        console.log(matchList.length)
+                        localStorage.setItem("historySnapshot", JSON.stringify(matchList));
+                    }
+                })
+            })
+        } else {
+            storedHistorySnapshot.forEach((match) => {
+                var ratingChange = match.ratingChange;
+
+                var userName = match.user;
+                var opp = match.opponent;
+
+                var win = match.win;
+
+                if (match.opponent == localStorage.getItem("username")){
+                    ratingChange *= -1;
+                    userName = match.opponent;
+                    opp = match.user;
+                    win = !win;
+                }
+                var change = (eval(ratingChange) > 0) ? "+" + ratingChange : ratingChange;
+                var historycardholder = document.getElementById("basehistorycard").cloneNode(true);
+                historycardholder.classList.remove("hidden");
+                var card = historycardholder.children[0];
+                card.setAttribute("onclick", "displayCardInfo(this, " + JSON.stringify(match) + ")");
+                card.children[0].children[0].setAttribute("src", (!match.modded) ? "icons/unmoddedIcon512512.png" : "icons/moddedIcon512512.png")
+                    card.children[1].children[0].innerHTML = userName;
+                    card.children[1].children[1].innerHTML = opp;
+                    if (win) {
+                        card.children[2].children[0].innerHTML = "Win(" + ratingChange + ")";
+                        card.children[2].children[1].innerHTML = "Lose(" + eval(-1 * ratingChange) + ")";
+                    } else {
+                        card.children[2].children[0].innerHTML = "Lose(" + ratingChange + ")";
+                        card.children[2].children[1].innerHTML = "Win(" + eval(-1 * ratingChange) + ")";
+                    }
+                    card.children[3].innerHTML = match.date;
                     document.getElementById("matchhistorylist").children[0].appendChild(historycardholder);
             })
         }

@@ -23,6 +23,9 @@ function universalSetup() {
 	if (localStorage.getItem("theme") == null) {
 		localStorage.setItem("theme", "light");
 	}
+	if (document.getElementById("modal--theme") != null) {
+		document.getElementById("modal--theme").setAttribute("href", "modal/" + localStorage.getItem("theme") + "modal.css");
+	}
 	if (localStorage.getItem("username") != null && localStorage.getItem("username") != "" && localStorage.getItem("password") != null && localStorage.getItem("password") != "") {
 		var d = new Date();
 		if (localStorage.getItem("lastSetupReadTime") == null) {

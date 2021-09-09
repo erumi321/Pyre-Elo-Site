@@ -88,6 +88,16 @@ body {
     color: #fff;
 }
 
+.confirmbutton--red {
+    border: 3px solid red;
+    color: red;
+}
+
+.confirmbutton--red:hover{
+    background: #404040;
+    color: #fff;
+}
+
 .suggestions {
     border: 2px solid #606060;
 }
@@ -98,4 +108,16 @@ body {
 
 .suggestions div:hover {
     background: #404040 ;
+}
+
+.tooltip {
+    background-color: #1d1d1d;
+    border: solid #999;
+    color: #aaa;
+}
+
+.preview {
+    background-color: #1d1d1d;
+    border: solid #999;
+    color: #aaa;
 }

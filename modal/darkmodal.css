@@ -1,0 +1,11 @@
+/* modal */
+.modal--container {
+  background: #000000cc;
+}
+
+.modal {
+  color: #fff;
+  background: #202020;
+  box-shadow: #2b026e;
+  border-color: #8C82FC;
+}

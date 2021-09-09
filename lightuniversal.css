@@ -83,6 +83,17 @@
     color: #fff;
 }
 
+.confirmbutton--red {
+    border: 3px solid red;
+    color: red;
+}
+
+.confirmbutton--red:hover{
+    background: red;
+    color: #fff;
+    transition: 0.3s ease-in-out;
+}
+
 .suggestions {
     border: 2px solid #8C82FC;
 }
@@ -93,4 +104,16 @@
 
 .suggestions div:hover {
     background: #ddd;
+}
+
+.tooltip {
+    background-color: #fff;
+    border: solid #201f73;
+    transition: background-color 0.3s;
+}
+
+.preview {
+    background-color: #fff;
+    border: solid #201f73;
+    transition: background-color 0.3s;
 }

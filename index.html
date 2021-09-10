@@ -170,23 +170,25 @@
                             .get()
                             .then((oppSnapshot) => {
                                 oppSnapshot.forEach((opp) => {
-                                    var AS = player.data().rating;
-                                    var BS = opp.data().rating;
-                                    var aD = eval("((" + AS + "+" + BS + ") / 2) / 10");
-                                    var aWinChange = eval("(" + AS + "/" + aD + ") * (" + BS + "/" + AS + ")");
-                                    var bWinChange = eval("(" + BS + "/" + aD + ") * (" + AS + "/" + BS + ")");
-
                                     var changeA = 0;
                                     var changeB = 0;
-                                    if (isWin == true) {
-                                        changeA = aWinChange;
-                                        changeB = eval("-1 * " + aWinChange)
-                                    } else {
-                                        changeA = eval("-1 * " + bWinChange);
-                                        changeB = bWinChange
+                                    if (oppName != "CPU"){
+                                        var AS = player.data().rating;
+                                        var BS = opp.data().rating;
+                                        var aD = eval("((" + AS + "+" + BS + ") / 2) / 10");
+                                        var aWinChange = eval("(" + AS + "/" + aD + ") * (" + BS + "/" + AS + ")");
+                                        var bWinChange = eval("(" + BS + "/" + aD + ") * (" + AS + "/" + BS + ")");
+
+                                        if (isWin == true) {
+                                            changeA = aWinChange;
+                                            changeB = eval("-1 * " + aWinChange)
+                                        } else {
+                                            changeA = eval("-1 * " + bWinChange);
+                                            changeB = bWinChange
+                                        }
+                                        changeA = Math.round(changeA);
+                                        changeB = Math.round(changeB);
                                     }
-                                    changeA = Math.round(changeA);
-                                    changeB = Math.round(changeB);
                                     db.collection("users").doc(player.id).set({
                                         password: player.data().password,
                                         username: player.data().username,
@@ -222,6 +224,8 @@
                                         rating: Math.max(Math.round(opp.data().rating + changeB), 1)
                                     }).catch((error) => {
                                         console.error("Error writing document: ", error);
+                                    }).then(()=>{
+                                        alert("Succesfully added new game!");
                                     });
                                 });
                             });

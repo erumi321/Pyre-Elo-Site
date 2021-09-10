@@ -262,20 +262,25 @@
                                     var tempBS = opp.data().rating;
 
                                     for (var x = 0; x < opponentNames[oppName]["matches"]; x++) {
-                                        var isWin = opponentNames[oppName]["isWin"][x];
-                                        var aD = eval("((" + tempAS + "+" + tempBS + ") / 2) / 10");
-                                        var aWinChange = eval("(" + tempAS + "/" + aD + ") * (" + tempBS + "/" + tempAS + ")");
-                                        var bWinChange = eval("(" + tempBS + "/" + aD + ") * (" + tempAS + "/" + tempBS + ")");
                                         var changeA = 0;
                                         var changeB = 0;
-                                        if (isWin == true) {
-                                            changeA = aWinChange;
-                                            changeB = eval("-1 * " + aWinChange)
-                                        } else {
-                                            changeA = eval("-1 * " + bWinChange);
-                                            changeB = bWinChange
+                                        if (oppName == "CPU"){
+                                            var isWin = opponentNames[oppName]["isWin"][x];
+                                            var aD = eval("((" + tempAS + "+" + tempBS + ") / 2) / 10");
+                                            var aWinChange = eval("(" + tempAS + "/" + aD + ") * (" + tempBS + "/" + tempAS + ")");
+                                            var bWinChange = eval("(" + tempBS + "/" + aD + ") * (" + tempAS + "/" + tempBS + ")");
+
+                                            if (isWin == true) {
+                                                changeA = aWinChange;
+                                                changeB = eval("-1 * " + aWinChange)
+                                            } else {
+                                                changeA = eval("-1 * " + bWinChange);
+                                                changeB = bWinChange
+                                            }
+
+                                            changeA = Math.round(changeA);
+                                            changeB = Math.round(changeB);
                                         }
-                                        changeA = Math.round(changeA);
 
                                         matchLogA.push({
                                             "oppRating": tempBS,
@@ -283,8 +288,6 @@
                                             "ratingChange": changeA,
                                             "modded": false,
                                         });
-
-                                        changeB = Math.round(changeB);
 
                                         matchLogB.push({
                                             "oppRating": tempAS,
